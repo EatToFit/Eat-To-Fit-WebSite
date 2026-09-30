@@ -1,0 +1,14 @@
+---
+import Icon from './Icon.astro';
+interface Props { slug: string; category: string; title: string; excerpt: string; readTime: string; }
+const props = Astro.props;
+---
+<a class="article-card card card-hover" href={`/learn/${props.slug}`}>
+  <div class="article-top"><span>{props.category}</span><small>{props.readTime}</small></div>
+  <h3 class="h3">{props.title}</h3>
+  <p>{props.excerpt}</p>
+  <div class="article-link">مطالعه مقاله <Icon name="arrow-left" size={17}/></div>
+</a>
+<style>
+  .article-card{display:flex;flex-direction:column;min-height:290px}.article-top{display:flex;justify-content:space-between;gap:12px;margin-bottom:20px;color:var(--primary-700);font-size:.78rem;font-weight:800}.article-top small{color:var(--muted);font-weight:600}.article-card h3{font-size:1.25rem}.article-card p{color:var(--muted);margin:0 0 22px}.article-link{display:flex;align-items:center;gap:7px;margin-top:auto;color:var(--primary-800);font-weight:800;font-size:.88rem}
+</style>

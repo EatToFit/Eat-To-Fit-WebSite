@@ -1,0 +1,20 @@
+---
+interface Props { compact?: boolean; inverse?: boolean; }
+const { compact = false, inverse = false } = Astro.props;
+---
+<a href="/" class:list={["logo", { inverse, compact }]} aria-label="Eat To Fit - صفحه اصلی">
+  <span class="mark" aria-hidden="true">
+    <svg viewBox="0 0 48 48" role="img">
+      <path d="M10 27c8-1 12-8 14-17 7 4 11 10 13 18-5-4-10-5-15-3-5 2-8 6-9 11-3-2-4-5-3-9Z" fill="currentColor" opacity=".95"/>
+      <path d="M16 31c6-5 13-6 21-2-4 7-10 11-17 10-4-1-6-3-7-5 1-1 2-2 3-3Z" fill="currentColor" opacity=".5"/>
+      <path d="M20 9c-1 7 0 12 4 16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
+    </svg>
+  </span>
+  <span class="wordmark">
+    <strong>Eat To Fit</strong>
+    {!compact && <small>تغذیه متناسب با شما</small>}
+  </span>
+</a>
+<style>
+  .logo{display:inline-flex;align-items:center;gap:11px;color:var(--primary-900);min-width:max-content}.mark{width:42px;height:42px;display:grid;place-items:center;border-radius:14px;background:linear-gradient(145deg,var(--primary-100),#fff);border:1px solid var(--primary-200);box-shadow:var(--shadow-xs);color:var(--primary-700)}.mark svg{width:28px;height:28px}.wordmark{display:flex;flex-direction:column;line-height:1.2}.wordmark strong{font-size:1rem;letter-spacing:.01em}.wordmark small{font-size:.65rem;color:var(--muted);margin-top:4px;direction:ltr;text-align:left}.inverse{color:white}.inverse .mark{color:white;background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.15)}.inverse .wordmark small{color:rgba(255,255,255,.6)}.compact .mark{width:38px;height:38px}.compact .wordmark small{display:none}@media(max-width:420px){.wordmark small{display:none}}
+</style>

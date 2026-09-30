@@ -1,0 +1,23 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Icon from '@/components/Icon.astro';
+import { siteConfig } from '@/config/site';
+const groups = [
+  ['user','مشخصات پایه','برای شناخت نقطه شروع و تناسب بهتر محاسبات و انتخاب‌های برنامه.'],
+  ['target','هدف','تا جهت برنامه با هدفی که دنبال می‌کنید هماهنگ باشد.'],
+  ['activity','فعالیت روزانه','برای اینکه برنامه با میزان تحرک و سبک روزمره شما فاصله نداشته باشد.'],
+  ['dumbbell','تمرین','نوع، دفعات و زمان تمرین روی زمان‌بندی و ساختار وعده‌ها اثر می‌گذارد.'],
+  ['clock','زمان وعده‌ها','برنامه باید در ساعت‌هایی قابل اجرا باشد که واقعاً امکان غذا خوردن دارید.'],
+  ['heart','ترجیحات غذایی','غذاهای موردعلاقه و نامطلوب کمک می‌کنند برنامه برای شما طبیعی‌تر باشد.'],
+  ['shield','محدودیت‌ها و حساسیت‌ها','برای کنار گذاشتن انتخاب‌هایی که برای شما مناسب نیستند.'],
+  ['droplet','آب و عادت‌های روزانه','برای شناخت بهتر الگوی روزانه و توصیه‌های همراه برنامه.']
+];
+---
+<BaseLayout title="راهنمای پرسشنامه | Eat To Fit" description="چرا در پرسشنامه Eat To Fit درباره هدف، تمرین، سبک زندگی و ترجیحات غذایی سؤال می‌شود؟">
+  <section class="page-hero page-hero-tinted"><div class="container page-hero-inner"><div class="breadcrumb"><a href="/">خانه</a><span>/</span><span>راهنمای پرسشنامه</span></div><span class="eyebrow">چرا این سؤال‌ها را می‌پرسیم؟</span><h1 class="h1">هر سؤال، بخشی از <span class="accent">شناخت بهتر شما</span> است.</h1><p class="lead">پرسشنامه کمک می‌کند برنامه فقط روی چند عدد پایه نایستد و شرایط واقعی زندگی، تمرین و انتخاب‌های غذایی شما هم در آن دیده شود.</p><div class="actions"><a class="btn btn-primary" href={siteConfig.questionnaireUrl} target="_blank" rel="noopener noreferrer">باز کردن پرسشنامه <Icon name="arrow-up-left" size={18}/></a></div></div></section>
+  <section class="section"><div class="container"><div class="q-groups">{groups.map((g,index)=><article class="q-group card reveal"><div class="q-number">{index+1}</div><div class="icon-box"><Icon name={g[0]}/></div><h3>{g[1]}</h3><p>{g[2]}</p></article>)}</div></div></section>
+  <section class="section section-color-b"><div class="container privacy-grid"><div><span class="eyebrow">یک نکته مهم</span><h2 class="h2">پرسشنامه آزمون نیست؛ تصویر زندگی روزمره شماست.</h2><p class="lead">قرار نیست پاسخ ایده‌آل بدهید. هرچه اطلاعات ثبت‌شده به شرایط واقعی شما نزدیک‌تر باشد، امکان هماهنگ کردن برنامه با زندگی روزمره بیشتر می‌شود.</p></div><div class="privacy-card"><Icon name="heart" size={28}/><h3>با جزئیات راحت‌تر برنامه را به شما نزدیک می‌کنیم.</h3><p>زمان تمرین، ساعت وعده‌ها، غذاهای موردعلاقه و محدودیت‌ها کمک می‌کنند انتخاب‌های برنامه از همان ابتدا کاربردی‌تر باشند.</p><a class="text-link" href={siteConfig.questionnaireUrl} target="_blank" rel="noopener noreferrer">شروع پرسشنامه <Icon name="arrow-up-left" size={17}/></a></div></div></section>
+</BaseLayout>
+<style>
+.q-groups{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.q-group{position:relative;overflow:hidden;min-height:230px}.q-number{position:absolute;left:16px;top:13px;font-size:2rem;line-height:1;font-weight:900;color:var(--primary-100)}.q-group .icon-box{margin-bottom:18px}.q-group h3{font-size:1rem}.q-group p{font-size:.82rem;color:var(--muted)}.q-group:nth-child(3n+2){background:linear-gradient(145deg,#fff,var(--secondary-50))}.q-group:nth-child(3n+2) .icon-box{color:var(--secondary-700);background:var(--secondary-50);border-color:var(--secondary-200)}.privacy-grid{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:center}.privacy-card{padding:30px;border-radius:30px;background:linear-gradient(145deg,#fff,var(--primary-50));border:1px solid var(--primary-200);box-shadow:var(--shadow-sm)}.privacy-card>svg{color:var(--secondary-600)}.privacy-card h3{margin:16px 0 8px;font-size:1.25rem}.privacy-card p{color:var(--muted)}@media(max-width:960px){.q-groups{grid-template-columns:repeat(2,1fr)}}@media(max-width:740px){.q-groups,.privacy-grid{grid-template-columns:1fr}}
+</style>

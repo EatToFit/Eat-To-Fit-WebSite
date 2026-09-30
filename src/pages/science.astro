@@ -1,0 +1,21 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Icon from '@/components/Icon.astro';
+import SectionHeading from '@/components/SectionHeading.astro';
+import { evidenceSources } from '@/data/sources';
+---
+<BaseLayout title="علم و منابع | Eat To Fit" description="نگاهی به دسته‌های اصلی منابع علمی و پایگاه‌های داده مورد استفاده در Eat To Fit.">
+  <section class="page-hero page-hero-tinted"><div class="container page-hero-inner"><div class="breadcrumb"><a href="/">خانه</a><span>/</span><span>علم و منابع</span></div><span class="eyebrow">پشتوانه علمی</span><h1 class="h1">تصمیم‌های بهتر، وقتی از <span class="accent">منابع معتبر</span> شروع می‌شوند.</h1><p class="lead">برای طراحی ساختار تغذیه‌ای و انتخاب داده‌های غذایی، از مجموعه‌ای از پایگاه‌های رسمی، راهنماهای علمی و پژوهش‌های معتبر استفاده می‌شود.</p></div></section>
+  <section class="section"><div class="container"><SectionHeading eyebrow="منابع اصلی" title="چند لایه از داده و شواهد، برای یک تصویر دقیق‌تر" text="هر منبع نقش متفاوتی دارد؛ از ترکیبات غذایی تا راهنماهای تغذیه ورزشی و توصیه‌های مرجع."/><div class="source-grid">
+    {evidenceSources.map(source => <article class="source-card card card-hover"><div class="source-top"><span>{source.short}</span><small>{source.type}</small></div><h3>{source.title}</h3><p>{source.description}</p>{source.url ? <a href={source.url} target="_blank" rel="noopener noreferrer">مشاهده منبع <Icon name="external" size={15}/></a> : <span class="local-note">منابع بومی معتبر</span>}</article>)}
+  </div></div></section>
+  <section class="section section-color-a"><div class="container"><SectionHeading eyebrow="رویکرد انتخاب منبع" title="سه نکته‌ای که کیفیت داده را برای ما مهم‌تر می‌کند"/><div class="grid-3 principles">
+    <article class="card"><div class="icon-box"><Icon name="database"/></div><h3>منبع مناسب برای همان غذا</h3><p>تا جای ممکن داده‌ای انتخاب می‌شود که با نوع غذا، شیوه آماده‌سازی و زمینه مصرف آن هماهنگ‌تر باشد.</p></article>
+    <article class="card"><div class="icon-box warm"><Icon name="layers"/></div><h3>توجه به شکل مصرف غذا</h3><p>غذای خام، پخته، آماده مصرف یا محصول تجاری می‌تواند ویژگی‌های متفاوتی داشته باشد؛ این تفاوت در انتخاب داده مهم است.</p></article>
+    <article class="card"><div class="icon-box"><Icon name="shield"/></div><h3>استفاده محتاطانه از اعداد</h3><p>وقتی کیفیت یا تناسب یک داده کافی نباشد، انتخاب محافظه‌کارانه بر استفاده از یک عدد نامطمئن ترجیح داده می‌شود.</p></article>
+  </div></div></section>
+  <section class="section"><div class="container source-note"><Icon name="book" size={26}/><div><h2>هدف از منابع علمی، پیچیده کردن تجربه شما نیست.</h2><p>پشتوانه علمی باید به انتخاب‌های بهتر کمک کند، در حالی که خروجی نهایی برای شما همچنان روشن، ساده و کاربردی باقی بماند.</p></div></div></section>
+</BaseLayout>
+<style>
+.source-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:28px}.source-card{display:flex;flex-direction:column}.source-top{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:16px}.source-top span{font-weight:900;color:var(--primary-800)}.source-top small{padding:5px 8px;border-radius:999px;background:var(--surface-3);color:var(--muted)}.source-card h3{font-size:1rem;margin:0 0 9px}.source-card p{color:var(--muted);font-size:.84rem;flex:1}.source-card a,.local-note{display:inline-flex;align-items:center;gap:6px;color:var(--primary-700);font-size:.78rem;font-weight:800;margin-top:10px}.principles .card{min-height:235px}.principles .icon-box{margin-bottom:18px}.principles p{color:var(--muted)}.source-note{display:flex;align-items:flex-start;gap:18px;padding:30px 34px;border-radius:30px;background:linear-gradient(135deg,var(--secondary-50),var(--primary-50));border:1px solid var(--secondary-100)}.source-note>svg{color:var(--secondary-600);flex:0 0 auto}.source-note h2{margin:0 0 6px;font-size:1.35rem}.source-note p{margin:0;color:var(--muted)}@media(max-width:960px){.source-grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:650px){.source-grid{grid-template-columns:1fr}.source-note{padding:24px}}
+</style>

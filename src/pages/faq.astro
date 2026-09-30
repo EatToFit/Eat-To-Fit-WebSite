@@ -1,0 +1,10 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import FAQList from '@/components/FAQList.astro';
+import Icon from '@/components/Icon.astro';
+---
+<BaseLayout title="سؤالات متداول | Eat To Fit" description="پاسخ روشن به سؤال‌های متداول درباره نحوه آماده‌سازی برنامه، پرسشنامه، منابع علمی و ماهیت سرویس Eat To Fit.">
+  <section class="page-hero"><div class="container page-hero-inner"><div class="breadcrumb"><a href="/">خانه</a><span>/</span><span>سؤالات متداول</span></div><span class="eyebrow">سؤالات متداول</span><h1 class="h1">پاسخ روشن، قبل از اینکه از شما بخواهیم شروع کنید.</h1><p class="lead">اگر چیزی درباره ماهیت سرویس، نحوه آماده‌سازی برنامه یا اطلاعات مورد نیاز مبهم است، اینجا باید پاسخ آن را پیدا کنید.</p></div></section>
+  <section class="section"><div class="container faq-page"><FAQList/><aside class="card"><div class="icon-box"><Icon name="mail"/></div><h2>سؤال دیگری دارید؟</h2><p>راه‌های ارتباط رسمی در صفحه ارتباط قرار می‌گیرند و می‌توانید سؤال‌هایی را که در این بخش نیستند از آن مسیر مطرح کنید.</p><a class="btn btn-primary" href="/contact">صفحه ارتباط</a></aside></div></section>
+</BaseLayout>
+<style>.faq-page{display:grid;grid-template-columns:1.4fr .6fr;gap:30px;align-items:start}.faq-page aside{position:sticky;top:110px}.faq-page aside .icon-box{margin-bottom:18px}.faq-page aside h2{font-size:1.25rem;margin:0 0 8px}.faq-page aside p{color:var(--muted);font-size:.86rem}.faq-page aside .btn{margin-top:10px}@media(max-width:800px){.faq-page{grid-template-columns:1fr}.faq-page aside{position:static}}</style>

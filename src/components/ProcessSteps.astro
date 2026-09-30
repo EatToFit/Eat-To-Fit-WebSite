@@ -1,0 +1,24 @@
+---
+import Icon from './Icon.astro';
+const steps = [
+  ['user','شناخت شما','اطلاعات پایه، سبک زندگی و شرایط روزمره را می‌شناسیم.'],
+  ['target','هدف و اولویت','هدف اصلی و محدودیت‌هایی که باید در برنامه رعایت شوند مشخص می‌شوند.'],
+  ['activity','فعالیت و تمرین','نوع فعالیت و الگوی تمرین برای درک بهتر نیازهای روزانه بررسی می‌شود.'],
+  ['fork','ساختار غذایی','غذاها و وعده‌ها متناسب با ترجیحات و الگوی زندگی انتخاب می‌شوند.'],
+  ['adjust','تنظیم مقدار','مقدار هر بخش وعده به شکلی قابل فهم و قابل اجرا تنظیم می‌شود.'],
+  ['check','بازبینی نهایی','قبل از تحویل، سازگاری برنامه با اطلاعات ثبت‌شده کنترل می‌شود.']
+];
+---
+<div class="process-grid">
+  {steps.map((step, index) => (
+    <article class="process-card reveal">
+      <div class="process-num">{String(index + 1).padStart(2,'0')}</div>
+      <div class="icon-box"><Icon name={step[0]} /></div>
+      <h3>{step[1]}</h3>
+      <p>{step[2]}</p>
+    </article>
+  ))}
+</div>
+<style>
+  .process-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.process-card{position:relative;min-height:230px;padding:24px;border-radius:24px;background:rgba(255,253,252,.88);border:1px solid var(--line);box-shadow:var(--shadow-xs);overflow:hidden}.process-num{position:absolute;left:18px;top:14px;font-size:2.7rem;font-weight:900;color:rgba(55,124,113,.08);letter-spacing:-.08em}.process-card h3{margin:22px 0 8px;font-size:1.08rem}.process-card p{margin:0;color:var(--muted);font-size:.9rem}.process-card::after{content:"";position:absolute;right:0;bottom:0;width:0;height:3px;background:var(--primary-500);transition:width .35s var(--ease)}.process-card:hover::after{width:100%}@media(max-width:900px){.process-grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:600px){.process-grid{grid-template-columns:1fr}.process-card{min-height:auto}}
+</style>

@@ -1,0 +1,8 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Icon from '@/components/Icon.astro';
+---
+<BaseLayout title="صفحه پیدا نشد | Eat To Fit" noindex={true}>
+  <section class="not-found"><div class="container"><div class="nf-card"><span>۴۰۴</span><h1>این صفحه در برنامه امروز نیست.</h1><p>ممکن است آدرس تغییر کرده باشد یا صفحه‌ای که دنبالش هستید وجود نداشته باشد.</p><a class="btn btn-primary" href="/">بازگشت به خانه <Icon name="arrow-left" size={18}/></a></div></div></section>
+</BaseLayout>
+<style>.not-found{min-height:65vh;display:grid;place-items:center;padding:70px 0}.nf-card{max-width:650px;margin:auto;text-align:center;padding:50px 30px;border-radius:34px;background:white;border:1px solid var(--line);box-shadow:var(--shadow-sm)}.nf-card>span{display:block;font-size:5rem;line-height:1;font-weight:900;color:var(--primary-100)}.nf-card h1{font-size:2rem}.nf-card p{color:var(--muted);margin-bottom:25px}</style>

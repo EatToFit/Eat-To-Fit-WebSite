@@ -1,0 +1,26 @@
+---
+import Icon from './Icon.astro';
+---
+<div class="plan-preview" aria-label="نمونه نمایشی ساختار برنامه غذایی">
+  <div class="plan-head">
+    <div><span class="demo-label">نمایش مفهومی</span><strong>برنامه روزانه</strong></div>
+    <div class="profile-pill"><span class="dot"></span> شخصی‌سازی‌شده</div>
+  </div>
+  <div class="meal-tabs"><span class="active">صبحانه</span><span>میان‌وعده</span><span>ناهار</span><span>شام</span></div>
+  <div class="meal-card">
+    <div class="meal-icon"><Icon name="fork" /></div>
+    <div class="meal-content">
+      <div class="meal-title"><strong>گزینه متناسب با الگوی شما</strong><span>۰۷:۳۰</span></div>
+      <p>منبع پروتئین + کربوهیدرات تنظیم‌شده + همراهی متناسب با وعده</p>
+      <div class="portion-row"><span>مقدار قابل اجرا</span><span>واحد خانگی روشن</span><span>جایگزین‌های مشخص</span></div>
+    </div>
+  </div>
+  <div class="mini-grid">
+    <div><Icon name="droplet" size={19}/><span>آب</span><b>متناسب با شرایط</b></div>
+    <div><Icon name="moon" size={19}/><span>خواب</span><b>یادآوری سبک زندگی</b></div>
+    <div><Icon name="heart" size={19}/><span>ترجیحات</span><b>در انتخاب غذا لحاظ می‌شود</b></div>
+  </div>
+</div>
+<style>
+  .plan-preview{position:relative;padding:20px;border-radius:30px;background:linear-gradient(145deg,#fffdfc,#f8faf7);border:1px solid var(--line);box-shadow:var(--shadow-md);overflow:hidden}.plan-preview::before{content:"";position:absolute;width:180px;height:180px;border-radius:50%;left:-80px;top:-90px;background:var(--primary-100);filter:blur(1px)}.plan-head,.meal-tabs,.meal-card,.mini-grid{position:relative;z-index:1}.plan-head{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:16px}.plan-head>div:first-child{display:flex;flex-direction:column}.demo-label{font-size:.68rem;color:var(--muted);margin-bottom:3px}.profile-pill{display:flex;align-items:center;gap:7px;padding:7px 10px;border-radius:999px;background:var(--primary-50);color:var(--primary-800);font-size:.72rem;font-weight:800}.dot{width:7px;height:7px;border-radius:50%;background:var(--primary-500);box-shadow:0 0 0 4px rgba(77,148,137,.12)}.meal-tabs{display:flex;gap:7px;overflow:auto;padding-bottom:5px;margin-bottom:13px}.meal-tabs span{white-space:nowrap;padding:7px 10px;border-radius:10px;background:var(--surface-3);color:var(--muted);font-size:.73rem}.meal-tabs .active{background:var(--primary-900);color:white}.meal-card{display:flex;gap:14px;padding:16px;border-radius:20px;background:white;border:1px solid var(--line);box-shadow:var(--shadow-xs)}.meal-icon{width:44px;height:44px;display:grid;place-items:center;flex:0 0 auto;border-radius:14px;background:var(--secondary-50);color:var(--secondary-700)}.meal-content{min-width:0;flex:1}.meal-title{display:flex;justify-content:space-between;gap:12px}.meal-title span{font-size:.74rem;color:var(--muted)}.meal-content p{font-size:.8rem;color:var(--muted);margin:7px 0 12px}.portion-row{display:flex;flex-wrap:wrap;gap:6px}.portion-row span{font-size:.67rem;padding:5px 7px;border-radius:8px;background:var(--primary-50);color:var(--primary-800)}.mini-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}.mini-grid div{display:grid;gap:3px;padding:11px;border-radius:15px;background:rgba(255,255,255,.72);border:1px solid var(--line);color:var(--primary-700)}.mini-grid span{font-size:.66rem;color:var(--muted)}.mini-grid b{font-size:.68rem;color:var(--ink);font-weight:700}@media(max-width:520px){.mini-grid{grid-template-columns:1fr}.meal-title{flex-direction:column;gap:2px}}
+</style>

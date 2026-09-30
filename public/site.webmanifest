@@ -1,0 +1,9 @@
+{
+  "name": "Eat To Fit",
+  "short_name": "Eat To Fit",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f2f3f0",
+  "theme_color": "#183d38",
+  "icons": []
+}

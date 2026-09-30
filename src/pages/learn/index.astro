@@ -1,0 +1,9 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import ArticleCard from '@/components/ArticleCard.astro';
+import { articles } from '@/data/articles';
+---
+<BaseLayout title="یادگیری | Eat To Fit" description="مطالب Eat To Fit درباره برنامه‌ریزی غذایی، شخصی‌سازی و اجرای بهتر برنامه به زبان ساده.">
+  <section class="page-hero"><div class="container page-hero-inner"><div class="breadcrumb"><a href="/">خانه</a><span>/</span><span>یادگیری</span></div><span class="eyebrow">مطالب آموزشی</span><h1 class="h1">کمتر مقاله؛ <span class="accent">توضیح بهتر.</span></h1><p class="lead">مطالب این بخش برای پاسخ دادن به سؤال‌های واقعی درباره تغذیه، اجرای برنامه و انتخاب‌های روزمره آماده شده‌اند.</p></div></section>
+  <section class="section"><div class="container"><div class="grid-3">{articles.map(article => <ArticleCard {...article}/>)}</div></div></section>
+</BaseLayout>

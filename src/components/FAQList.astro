@@ -1,0 +1,18 @@
+---
+import Icon from './Icon.astro';
+import { faqs } from '@/data/faqs';
+interface Props { limit?: number; }
+const { limit } = Astro.props;
+const items = limit ? faqs.slice(0, limit) : faqs;
+---
+<div class="faq-list">
+  {items.map((item, index) => (
+    <details class="faq" open={index === 0}>
+      <summary><span>{item.question}</span><span class="faq-icon"><Icon name="plus" size={18}/></span></summary>
+      <div class="answer"><p>{item.answer}</p></div>
+    </details>
+  ))}
+</div>
+<style>
+  .faq-list{display:grid;gap:10px}.faq{background:rgba(255,253,252,.86);border:1px solid var(--line);border-radius:18px;overflow:hidden;transition:border-color .2s,box-shadow .2s}.faq[open]{border-color:var(--primary-200);box-shadow:var(--shadow-xs)}summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:18px;padding:18px 20px;font-weight:800}summary::-webkit-details-marker{display:none}.faq-icon{width:32px;height:32px;border-radius:10px;display:grid;place-items:center;background:var(--surface-3);color:var(--primary-700);transition:transform .25s var(--ease)}.faq[open] .faq-icon{transform:rotate(45deg);background:var(--primary-100)}.answer{padding:0 20px 18px}.answer p{margin:0;color:var(--muted)}
+</style>

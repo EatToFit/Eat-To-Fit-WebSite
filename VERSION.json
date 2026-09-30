@@ -1,0 +1,8 @@
+{
+  "project": "Eat To Fit Website",
+  "version": "1.2.1",
+  "release_date": "2026-09-30",
+  "status": "NAVIGATION_SPACING_HOTFIX",
+  "platform": "Astro + Cloudflare Workers Static Assets",
+  "release": "v1.2.1_navigation_spacing_hotfix"
+}

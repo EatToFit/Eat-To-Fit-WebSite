@@ -1,0 +1,167 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Icon from '@/components/Icon.astro';
+import SectionHeading from '@/components/SectionHeading.astro';
+import ProcessSteps from '@/components/ProcessSteps.astro';
+import PlanPreview from '@/components/PlanPreview.astro';
+import FAQList from '@/components/FAQList.astro';
+import ArticleCard from '@/components/ArticleCard.astro';
+import { articles } from '@/data/articles';
+import { siteConfig } from '@/config/site';
+---
+<BaseLayout>
+  <section class="hero">
+    <div class="container hero-grid">
+      <div class="hero-copy reveal">
+        <span class="eyebrow">برنامه غذایی شخصی‌سازی‌شده</span>
+        <h1 class="display">برنامه‌ای برای <span class="accent">تغییر نگاه شما به رژیم</span></h1>
+        <p class="lead">Eat To Fit برای ساختن برنامه‌ای متناسب با شما، هدف، سبک زندگی، تمرین، زمان‌بندی روز و ترجیحات غذایی‌تان را کنار هم قرار می‌دهد؛ تا رژیم از یک محدودیت موقت به بخشی قابل اجرا از زندگی روزمره تبدیل شود.</p>
+        <div class="actions">
+          <a class="btn btn-primary" href={siteConfig.questionnaireUrl} target="_blank" rel="noopener noreferrer">شروع ارزیابی <Icon name="arrow-up-left" size={18}/></a>
+          <a class="btn btn-secondary" href="/how-it-works">ببینید چگونه کار می‌کند</a>
+        </div>
+        <div class="trust-row" aria-label="ویژگی‌های اصلی">
+          <span><Icon name="check" size={16}/> متناسب با شرایط شما</span>
+          <span><Icon name="database" size={16}/> داده‌محور</span>
+          <span><Icon name="adjust" size={16}/> شخصی‌سازی‌شده</span>
+          <span><Icon name="shield" size={16}/> بدون وعده‌های اغراق‌آمیز</span>
+        </div>
+      </div>
+      <div class="hero-visual reveal">
+        <div class="orb orb-a"></div><div class="orb orb-b"></div>
+        <div class="visual-frame">
+          <div class="visual-head">
+            <div><small>نمای کلی برنامه</small><strong>مسیر شخصی‌سازی</strong></div>
+            <span class="status"><i></i> در حال بررسی</span>
+          </div>
+          <div class="profile-grid">
+            <div class="profile-main">
+              <div class="profile-icon"><Icon name="user" size={28}/></div>
+              <div><small>اطلاعات فردی</small><strong>سبک زندگی + هدف + تمرین</strong></div>
+            </div>
+            <div class="metric"><span>هدف</span><b>شخصی</b></div>
+            <div class="metric"><span>وعده‌ها</span><b>هماهنگ</b></div>
+          </div>
+          <div class="flow-line">
+            <div class="flow-item active"><span>۱</span><b>شناخت</b></div><i></i>
+            <div class="flow-item active"><span>۲</span><b>تحلیل</b></div><i></i>
+            <div class="flow-item"><span>۳</span><b>تنظیم</b></div><i></i>
+            <div class="flow-item"><span>۴</span><b>بازبینی</b></div>
+          </div>
+          <div class="preference-card">
+            <div><Icon name="heart"/><span><small>ترجیحات غذایی</small><strong>در انتخاب وعده‌ها لحاظ می‌شود</strong></span></div>
+            <div class="signal"><i></i><i></i><i></i><i></i></div>
+          </div>
+          <div class="visual-foot"><Icon name="spark" size={17}/><span>هر انتخاب برای هماهنگی بیشتر برنامه با سبک زندگی شما انجام می‌شود.</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-tight" aria-label="تفاوت رویکرد">
+    <div class="container difference-strip reveal">
+      <div><strong>از شما شروع می‌کنیم</strong><span>نه از یک رژیم آماده</span></div>
+      <div><strong>مقدارها قابل اجرا هستند</strong><span>نه فقط عددهای آزمایشگاهی</span></div>
+      <div><strong>غذا باید با شما هماهنگ باشد</strong><span>نه شما با یک لیست ثابت</span></div>
+      <div><strong>فرایند شفاف است</strong><span>بدون ادعای جادویی</span></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <SectionHeading eyebrow="فرایند برنامه" title="از شناخت شما تا یک برنامه قابل اجرا" text="هر مرحله یک سؤال ساده دارد: این تصمیم چطور به بهتر اجرا شدن برنامه در زندگی واقعی شما کمک می‌کند؟" />
+      <ProcessSteps />
+      <div class="center-action"><a class="btn btn-ghost" href="/how-it-works">جزئیات کامل فرایند <Icon name="arrow-left" size={17}/></a></div>
+    </div>
+  </section>
+
+  <section class="section section-soft">
+    <div class="container showcase-grid">
+      <div class="showcase-copy reveal">
+        <span class="eyebrow">تجربه برنامه غذایی</span>
+        <h2 class="h2">خروجی باید همان‌قدر که دقیق است، <span class="accent-warm">قابل فهم</span> هم باشد.</h2>
+        <p class="lead">نمایش وعده‌ها، مقدارها، جایگزین‌ها و نکات روزمره طوری طراحی می‌شود که برای استفاده واقعی ساخته شده باشد؛ نه برای اینکه فقط روی صفحه خوب به نظر برسد.</p>
+        <ul class="check-list">
+          <li><span><Icon name="check" size={16}/></span>واحدهای قابل فهم برای مصرف روزمره</li>
+          <li><span><Icon name="check" size={16}/></span>ترکیب غذاهای ایرانی و بین‌المللی</li>
+          <li><span><Icon name="check" size={16}/></span>توجه به ترجیحات و محدودیت‌های ثبت‌شده</li>
+          <li><span><Icon name="check" size={16}/></span>نمایش ساده، فارسی و بدون اصطلاحات فنی داخلی</li>
+        </ul>
+        <a class="text-link" href="/meal-plan">تجربه برنامه را ببینید <Icon name="arrow-left" size={17}/></a>
+      </div>
+      <div class="reveal"><PlanPreview /></div>
+    </div>
+  </section>
+
+  <section class="section section-dark">
+    <div class="container evidence-grid">
+      <div class="reveal">
+        <span class="eyebrow">پشتوانه علمی</span>
+        <h2 class="h2">انتخاب‌های برنامه بر پایه منابع معتبر تغذیه و داده‌های غذایی شکل می‌گیرند.</h2>
+        <p class="lead">در انتخاب داده‌های غذایی و اصول تغذیه‌ای از منابع رسمی و پژوهش‌های معتبر استفاده می‌شود تا تصمیم‌های برنامه پشتوانه‌ای روشن و قابل اتکا داشته باشند.</p>
+        <div class="actions"><a class="btn btn-light" href="/science">علم و منابع Eat To Fit <Icon name="arrow-left" size={17}/></a></div>
+      </div>
+      <div class="source-cloud reveal" aria-label="دسته‌های منابع علمی">
+        <span class="source-lg">پایگاه ترکیبات غذایی آمریکا</span><span>فائو و اینفودز</span><span>پایگاه ترکیبات غذایی بریتانیا</span><span class="source-lg">مرجع ایمنی غذای اروپا</span><span>آکادمی‌های ملی علوم</span><span>منابع تغذیه ورزشی</span><span>منابع پزشکی ورزشی</span><span>پژوهش‌های معتبر ایرانی</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container questionnaire-grid">
+      <div class="question-visual reveal">
+        <div class="q-card q-main"><span>هدف اصلی شما چیست؟</span><div><b>کاهش چربی</b><b>حفظ عضله</b><b>عملکرد</b></div></div>
+        <div class="q-card q-small q-one"><Icon name="activity"/><span>تمرین شما</span></div>
+        <div class="q-card q-small q-two"><Icon name="fork"/><span>غذاهای موردعلاقه</span></div>
+        <div class="q-card q-small q-three"><Icon name="moon"/><span>سبک زندگی</span></div>
+      </div>
+      <div class="reveal">
+        <span class="eyebrow">پرسشنامه با دلیل</span>
+        <h2 class="h2">اگر سؤالی می‌پرسیم، باید بدانید چرا.</h2>
+        <p class="lead">پرسشنامه فقط جمع‌آوری اطلاعات نیست. هر دسته از سؤال‌ها برای شناخت بخشی از شرایطی است که روی طراحی یا اجرای برنامه اثر می‌گذارد.</p>
+        <div class="actions"><a class="btn btn-primary" href="/questionnaire">راهنمای پرسشنامه <Icon name="arrow-left" size={17}/></a></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-soft">
+    <div class="container">
+      <SectionHeading eyebrow="یادگیری" title="پشت تصمیم‌های برنامه چه منطقی وجود دارد؟" text="محتوا برای توضیح فرایند و تصمیم‌هاست، نه برای تولید حجم زیاد مقاله یا وعده‌های سریع." />
+      <div class="grid-3">{articles.map(article => <ArticleCard {...article} />)}</div>
+      <div class="center-action"><a class="btn btn-secondary" href="/learn">همه مطالب</a></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container faq-grid">
+      <div><SectionHeading eyebrow="سؤالات متداول" title="قبل از شروع، سؤال‌ها باید پاسخ روشن داشته باشند." text="مهم‌ترین ابهام‌ها درباره فرایند، اطلاعات مورد نیاز و ماهیت سرویس را اینجا پاسخ داده‌ایم."/><a class="text-link" href="/faq">مشاهده همه سؤال‌ها <Icon name="arrow-left" size={17}/></a></div>
+      <FAQList limit={4}/>
+    </div>
+  </section>
+
+  <section class="section-tight">
+    <div class="container final-cta reveal">
+      <div><span class="eyebrow">شروع مسیر</span><h2>اول شرایط شما را می‌شناسیم؛ بعد برنامه را متناسب با آن شکل می‌دهیم.</h2><p>پرسشنامه کمک می‌کند هدف، سبک زندگی، تمرین و ترجیحات غذایی شما از همان ابتدا در طراحی برنامه دیده شوند.</p></div>
+      <a class="btn btn-light" href={siteConfig.questionnaireUrl} target="_blank" rel="noopener noreferrer">شروع ارزیابی <Icon name="arrow-up-left" size={18}/></a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+.hero{padding:54px 0 70px;overflow:hidden}.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;align-items:center;gap:58px}.hero-copy .display{max-width:760px}.trust-row{display:flex;flex-wrap:wrap;gap:8px 14px;margin-top:30px;color:var(--muted);font-size:.78rem;font-weight:700}.trust-row span{display:flex;align-items:center;gap:5px}.trust-row svg{color:var(--primary-600)}.hero-visual{position:relative;min-height:560px;display:grid;place-items:center}.orb{position:absolute;border-radius:50%;filter:blur(2px)}.orb-a{width:380px;height:380px;background:rgba(55,124,113,.12);right:0;top:40px}.orb-b{width:240px;height:240px;background:rgba(124,55,66,.09);left:0;bottom:10px}.visual-frame{position:relative;width:min(100%,520px);padding:24px;border-radius:34px;background:rgba(255,253,252,.93);border:1px solid rgba(255,255,255,.95);box-shadow:0 36px 90px rgba(24,61,56,.18),inset 0 0 0 1px var(--line);backdrop-filter:blur(18px);transform:rotate(-1deg)}.visual-head{display:flex;align-items:center;justify-content:space-between;gap:14px;padding-bottom:18px;border-bottom:1px solid var(--line)}.visual-head>div{display:grid}.visual-head small{font-size:.68rem;color:var(--muted);direction:ltr;text-align:right}.status{display:flex;align-items:center;gap:7px;padding:7px 10px;border-radius:999px;background:var(--primary-50);color:var(--primary-800);font-size:.7rem;font-weight:800}.status i{width:7px;height:7px;border-radius:50%;background:var(--primary-500);box-shadow:0 0 0 4px rgba(77,148,137,.12)}.profile-grid{display:grid;grid-template-columns:1.6fr .7fr .7fr;gap:9px;margin:14px 0}.profile-main,.metric{border:1px solid var(--line);background:white;border-radius:17px;padding:12px}.profile-main{display:flex;align-items:center;gap:10px}.profile-icon{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;color:white;background:linear-gradient(145deg,var(--primary-700),var(--primary-900))}.profile-main>div:last-child{display:grid}.profile-main small,.metric span{font-size:.65rem;color:var(--muted)}.profile-main strong{font-size:.75rem}.metric{display:grid;align-content:center;text-align:center}.metric b{font-size:.74rem}.flow-line{display:flex;align-items:center;justify-content:space-between;gap:4px;padding:16px 6px}.flow-line>i{height:1px;flex:1;background:var(--line)}.flow-item{display:grid;justify-items:center;gap:5px;color:var(--muted)}.flow-item span{width:28px;height:28px;display:grid;place-items:center;border-radius:50%;border:1px solid var(--line);background:white;font-size:.68rem}.flow-item b{font-size:.63rem}.flow-item.active{color:var(--primary-800)}.flow-item.active span{color:white;background:var(--primary-700);border-color:var(--primary-700)}.preference-card{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px;border-radius:18px;background:linear-gradient(145deg,var(--secondary-50),#fff);border:1px solid var(--secondary-100)}.preference-card>div:first-child{display:flex;gap:10px;align-items:center;color:var(--secondary-700)}.preference-card span{display:grid}.preference-card small{font-size:.65rem;color:var(--muted)}.preference-card strong{font-size:.72rem;color:var(--ink)}.signal{display:flex;align-items:end;gap:3px}.signal i{display:block;width:5px;border-radius:4px;background:var(--secondary-500)}.signal i:nth-child(1){height:8px}.signal i:nth-child(2){height:13px}.signal i:nth-child(3){height:19px}.signal i:nth-child(4){height:25px}.visual-foot{display:flex;align-items:center;gap:7px;margin-top:12px;color:var(--muted);font-size:.68rem}.visual-foot svg{color:var(--primary-600)}.difference-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:24px;overflow:hidden;box-shadow:var(--shadow-xs)}.difference-strip>div{display:grid;gap:3px;padding:20px;background:rgba(255,253,252,.93)}.difference-strip strong{font-size:.88rem}.difference-strip span{font-size:.72rem;color:var(--muted)}.center-action{display:flex;justify-content:center;margin-top:30px}.showcase-grid,.evidence-grid,.questionnaire-grid,.faq-grid{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:60px}.check-list{list-style:none;padding:0;margin:28px 0;display:grid;gap:10px}.check-list li{display:flex;align-items:center;gap:10px;color:var(--ink-soft)}.check-list li>span{width:26px;height:26px;display:grid;place-items:center;border-radius:9px;background:var(--primary-100);color:var(--primary-700)}.text-link{display:inline-flex;align-items:center;gap:7px;color:var(--primary-800);font-weight:800}.source-cloud{min-height:360px;display:flex;flex-wrap:wrap;align-content:center;justify-content:center;gap:10px;padding:34px;border-radius:34px;border:1px solid rgba(255,255,255,.11);background:rgba(255,255,255,.055)}.source-cloud span{padding:11px 14px;border-radius:14px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);font-size:.82rem;color:rgba(255,255,255,.8);transform:rotate(-1deg)}.source-cloud span:nth-child(even){transform:rotate(1.5deg)}.source-cloud .source-lg{font-size:1.05rem;font-weight:800;background:rgba(255,255,255,.13);color:white}.question-visual{position:relative;min-height:380px}.q-card{position:absolute;background:white;border:1px solid var(--line);box-shadow:var(--shadow-sm);border-radius:22px}.q-main{inset:55px 20px auto 60px;padding:24px}.q-main>span{display:block;color:var(--muted);font-size:.8rem;margin-bottom:14px}.q-main>div{display:flex;flex-wrap:wrap;gap:7px}.q-main b{padding:8px 10px;border-radius:10px;background:var(--surface-3);font-size:.74rem}.q-main b:first-child{color:white;background:var(--primary-800)}.q-small{display:flex;align-items:center;gap:8px;padding:11px 14px;font-size:.72rem;font-weight:800}.q-small svg{color:var(--primary-700)}.q-one{right:0;top:0;transform:rotate(2deg)}.q-two{left:10px;top:235px;transform:rotate(-2deg)}.q-three{right:80px;bottom:5px;transform:rotate(1deg)}.faq-grid{align-items:start}.final-cta{display:flex;align-items:center;justify-content:space-between;gap:28px;padding:36px 40px;border-radius:32px;color:white;background:radial-gradient(circle at 12% 20%,rgba(255,255,255,.1),transparent 15rem),linear-gradient(145deg,var(--primary-900),var(--primary-700));box-shadow:var(--shadow-md)}.final-cta h2{font-size:clamp(1.5rem,3vw,2.35rem);margin:14px 0 6px}.final-cta p{margin:0;color:rgba(255,255,255,.7)}.final-cta .eyebrow{color:white;background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.14)}@media(max-width:980px){.hero-grid,.showcase-grid,.evidence-grid,.questionnaire-grid,.faq-grid{grid-template-columns:1fr;gap:38px}.hero-visual{min-height:500px}.difference-strip{grid-template-columns:repeat(2,1fr)}.evidence-grid .source-cloud{min-height:280px}.question-visual{order:2}.final-cta{align-items:flex-start;flex-direction:column}}@media(max-width:600px){.hero{padding-top:36px}.hero-visual{min-height:430px}.visual-frame{padding:16px;border-radius:26px}.profile-grid{grid-template-columns:1fr 1fr}.profile-main{grid-column:1/-1}.difference-strip{grid-template-columns:1fr}.q-main{inset:55px 5px auto 25px}.q-two{left:0}.q-three{right:30px}.final-cta{padding:26px;border-radius:26px}}
+
+/* richer home-page palette */
+.hero{position:relative;background:radial-gradient(circle at 82% 12%,rgba(55,124,113,.18),transparent 27rem),radial-gradient(circle at 4% 88%,rgba(124,55,66,.13),transparent 23rem),linear-gradient(135deg,#f8f5ef 0%,#edf5f1 48%,#f7eff1 100%);border-bottom:1px solid rgba(55,124,113,.10)}
+.hero::before{content:"";position:absolute;width:330px;height:330px;border-radius:42% 58% 35% 65% / 52% 36% 64% 48%;right:-165px;bottom:-180px;background:linear-gradient(145deg,rgba(55,124,113,.11),rgba(124,55,66,.07));transform:rotate(18deg)}
+.visual-frame{background:linear-gradient(160deg,rgba(255,255,255,.95),rgba(248,244,240,.93));border-color:rgba(255,255,255,.98)}
+.difference-strip{background:transparent;border:0;gap:10px;box-shadow:none;overflow:visible}
+.difference-strip>div{border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow-xs)}
+.difference-strip>div:nth-child(1){background:linear-gradient(145deg,#f7fbfa,var(--primary-100));border-color:var(--primary-200)}
+.difference-strip>div:nth-child(2){background:linear-gradient(145deg,#fff,var(--secondary-50));border-color:var(--secondary-100)}
+.difference-strip>div:nth-child(3){background:linear-gradient(145deg,#fff9f2,#f5f3e9);border-color:#e9e2cf}
+.difference-strip>div:nth-child(4){background:linear-gradient(145deg,#f7f3f7,#edf5f2);border-color:#ded8e2}
+.questionnaire-grid{padding:42px;border-radius:38px;background:linear-gradient(135deg,rgba(255,255,255,.68),rgba(231,242,239,.76));border:1px solid var(--primary-100)}
+.q-card{background:linear-gradient(145deg,#fff,#faf8f4)}
+.final-cta{background:radial-gradient(circle at 12% 20%,rgba(255,255,255,.13),transparent 15rem),radial-gradient(circle at 88% 80%,rgba(153,81,93,.30),transparent 22rem),linear-gradient(145deg,var(--primary-950),var(--primary-700))}
+@media(max-width:600px){.questionnaire-grid{padding:22px;border-radius:28px}}
+</style>

@@ -1,0 +1,15 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Icon from '@/components/Icon.astro';
+import ProcessSteps from '@/components/ProcessSteps.astro';
+import { siteConfig } from '@/config/site';
+---
+<BaseLayout title="چطور کار می‌کند | Eat To Fit" description="با مراحل آماده‌سازی یک برنامه غذایی شخصی‌سازی‌شده در Eat To Fit آشنا شوید.">
+  <section class="page-hero page-hero-tinted"><div class="container page-hero-inner"><div class="breadcrumb"><a href="/">خانه</a><span>/</span><span>چطور کار می‌کند</span></div><span class="eyebrow">مسیر برنامه</span><h1 class="h1">از شناخت شما تا برنامه‌ای که برای <span class="accent">سبک زندگی شما</span> شکل می‌گیرد.</h1><p class="lead">هدف ساده است: اطلاعات لازم را درست بشناسیم و آن‌ها را به انتخاب‌های غذایی روشن، قابل فهم و قابل اجرا تبدیل کنیم.</p></div></section>
+  <section class="section"><div class="container"><ProcessSteps /></div></section>
+  <section class="section section-color-a"><div class="container human-grid"><div><span class="eyebrow">شخصی‌سازی</span><h2 class="h2">برنامه از شرایط واقعی شما شروع می‌شود.</h2><p class="lead">هدف، زمان‌بندی روز، تمرین، ترجیحات غذایی و محدودیت‌های ثبت‌شده کنار هم قرار می‌گیرند تا انتخاب‌ها با زندگی شما هماهنگ باشند؛ نه اینکه شما مجبور شوید خودتان را با یک الگوی ثابت هماهنگ کنید.</p><div class="actions"><a class="btn btn-primary" href={siteConfig.questionnaireUrl} target="_blank" rel="noopener noreferrer">تکمیل پرسشنامه <Icon name="arrow-up-left" size={18}/></a></div></div><div class="human-card"><div><Icon name="user"/><strong>شناخت شرایط شما</strong></div><span></span><div><Icon name="spark"/><strong>تنظیم انتخاب‌ها</strong></div><span></span><div><Icon name="check"/><strong>برنامه قابل اجرا</strong></div></div></div></section>
+  <section class="section-tight"><div class="container final-box"><div><h2>قبل از شروع، می‌خواهید بدانید چرا هر سؤال پرسیده می‌شود؟</h2><p>راهنمای پرسشنامه توضیح می‌دهد هر دسته از اطلاعات چه نقشی در شخصی‌سازی برنامه دارد.</p></div><a class="btn btn-secondary" href="/questionnaire">راهنمای پرسشنامه <Icon name="arrow-left" size={18}/></a></div></section>
+</BaseLayout>
+<style>
+.human-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}.human-card{padding:34px;border-radius:34px;background:linear-gradient(145deg,rgba(255,255,255,.95),rgba(244,249,248,.88));border:1px solid var(--primary-200);box-shadow:var(--shadow-sm)}.human-card>div{display:flex;align-items:center;gap:13px;padding:17px;border-radius:18px;background:white;border:1px solid var(--line)}.human-card svg{color:var(--primary-700)}.human-card>span{display:block;width:2px;height:27px;margin:auto;background:linear-gradient(var(--primary-300),var(--secondary-200))}.final-box{display:flex;justify-content:space-between;align-items:center;gap:25px;padding:30px 34px;border-radius:28px;background:linear-gradient(135deg,var(--secondary-50),var(--primary-50));border:1px solid rgba(124,55,66,.12)}.final-box h2{margin:0 0 6px;font-size:1.35rem}.final-box p{margin:0;color:var(--muted)}@media(max-width:800px){.human-grid{grid-template-columns:1fr;gap:34px}.final-box{align-items:flex-start;flex-direction:column}}
+</style>
