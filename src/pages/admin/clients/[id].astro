@@ -1,0 +1,424 @@
+---
+export const prerender = false;
+
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import {
+  getClientDetail,
+  setClientAccountStatus,
+  setQuestionnaireStatus,
+} from '@/lib/server/admin';
+import {
+  isSameOriginPost,
+  requireActiveAdmin,
+} from '@/lib/server/admin-guard';
+
+Astro.response.headers.set('Cache-Control', 'private, no-store');
+Astro.response.headers.set('X-Robots-Tag', 'noindex, nofollow');
+
+const guard = await requireActiveAdmin(Astro);
+
+if (!guard.ok) {
+  return guard.response;
+}
+
+const clientId = Astro.params.id;
+
+if (!clientId) {
+  return new Response('Not Found', { status: 404 });
+}
+
+let actionMessage = '';
+let actionError = '';
+
+if (Astro.request.method === 'POST') {
+  if (!isSameOriginPost(Astro)) {
+    actionError = 'درخواست نامعتبر بود. صفحه را دوباره بارگذاری کنید.';
+  } else {
+    const data = await Astro.request.formData();
+    const action = String(data.get('action') ?? '');
+
+    try {
+      if (action === 'approve') {
+        await setClientAccountStatus({
+          actorUserId: guard.actor.id,
+          clientId,
+          status: 'ACTIVE',
+        });
+        actionMessage = 'حساب کلاینت فعال شد.';
+      } else if (action === 'suspend') {
+        await setClientAccountStatus({
+          actorUserId: guard.actor.id,
+          clientId,
+          status: 'SUSPENDED',
+        });
+        actionMessage = 'دسترسی کلاینت تعلیق شد.';
+      } else if (action === 'questionnaire') {
+        const status = String(data.get('questionnaire_status') ?? '');
+
+        if (!['NOT_RECEIVED', 'RECEIVED', 'REVIEWED'].includes(status)) {
+          throw new Error('INVALID_QUESTIONNAIRE_STATUS');
+        }
+
+        await setQuestionnaireStatus({
+          actorUserId: guard.actor.id,
+          clientId,
+          status: status as 'NOT_RECEIVED' | 'RECEIVED' | 'REVIEWED',
+        });
+
+        actionMessage = 'وضعیت پرسشنامه به‌روزرسانی شد.';
+      }
+    } catch {
+      actionError = 'انجام عملیات ممکن نشد. لطفاً دوباره تلاش کنید.';
+    }
+  }
+}
+
+const client = await getClientDetail(clientId);
+
+if (!client) {
+  return new Response('Not Found', { status: 404 });
+}
+
+const statusFa = {
+  PENDING: 'در انتظار بررسی',
+  ACTIVE: 'فعال',
+  SUSPENDED: 'تعلیق‌شده',
+} as const;
+---
+
+<BaseLayout
+  title="جزئیات کلاینت | Eat To Fit"
+  description="مدیریت کلاینت Eat To Fit"
+  noindex={true}
+>
+  <main class="detail-page">
+    <div class="container">
+      <header class="detail-header">
+        <div>
+          <a class="back-link" href="/admin/clients">← بازگشت به کلاینت‌ها</a>
+          <h1>
+            {
+              client.first_name || client.last_name
+                ? `${client.first_name ?? ''} ${client.last_name ?? ''}`.trim()
+                : client.username
+            }
+          </h1>
+          <p>{client.email}</p>
+        </div>
+
+        <span class={`account-status account-${client.account_status.toLowerCase()}`}>
+          {statusFa[client.account_status]}
+        </span>
+      </header>
+
+      {actionMessage && <div class="flash flash-success">{actionMessage}</div>}
+      {actionError && <div class="flash flash-error">{actionError}</div>}
+
+      <section class="detail-grid">
+        <article class="info-card">
+          <span class="eyebrow">مشخصات حساب</span>
+          <dl>
+            <div>
+              <dt>نام کاربری</dt>
+              <dd>{client.username}</dd>
+            </div>
+            <div>
+              <dt>شماره همراه</dt>
+              <dd>{client.phone_e164 ?? 'ثبت نشده'}</dd>
+            </div>
+            <div>
+              <dt>تکمیل پروفایل</dt>
+              <dd>{client.profile_completed_at ? 'تکمیل شده' : 'تکمیل نشده'}</dd>
+            </div>
+            <div>
+              <dt>تعداد برنامه‌ها</dt>
+              <dd>{client.meal_plan_count}</dd>
+            </div>
+          </dl>
+        </article>
+
+        <article class="action-card">
+          <span class="eyebrow">دسترسی حساب</span>
+          <h2>تأیید یا توقف دسترسی</h2>
+          <p>
+            قبل از فعال‌سازی، نام و شماره همراه را با پرسشنامه موجود در Google
+            Drive تطبیق دهید.
+          </p>
+
+          <div class="action-row">
+            {
+              client.account_status !== 'ACTIVE' && (
+                <form method="POST">
+                  <input type="hidden" name="action" value="approve" />
+                  <button
+                    class="button button-primary"
+                    type="submit"
+                    onclick="return confirm('از تطبیق اطلاعات این کلاینت مطمئن هستید؟')"
+                  >
+                    فعال‌سازی حساب
+                  </button>
+                </form>
+              )
+            }
+
+            {
+              client.account_status !== 'SUSPENDED' && (
+                <form method="POST">
+                  <input type="hidden" name="action" value="suspend" />
+                  <button
+                    class="button button-danger"
+                    type="submit"
+                    onclick="return confirm('دسترسی این کلاینت تعلیق شود؟')"
+                  >
+                    تعلیق دسترسی
+                  </button>
+                </form>
+              )
+            }
+          </div>
+        </article>
+
+        <article class="questionnaire-card">
+          <span class="eyebrow">پرسشنامه</span>
+          <h2>وضعیت بررسی پرسشنامه</h2>
+
+          <form method="POST" class="questionnaire-form">
+            <input type="hidden" name="action" value="questionnaire" />
+
+            <label>
+              <span>وضعیت</span>
+              <select name="questionnaire_status">
+                <option
+                  value="NOT_RECEIVED"
+                  selected={client.questionnaire_status === 'NOT_RECEIVED'}
+                >
+                  دریافت نشده
+                </option>
+                <option
+                  value="RECEIVED"
+                  selected={client.questionnaire_status === 'RECEIVED'}
+                >
+                  دریافت شده
+                </option>
+                <option
+                  value="REVIEWED"
+                  selected={client.questionnaire_status === 'REVIEWED'}
+                >
+                  بررسی شده
+                </option>
+              </select>
+            </label>
+
+            <button class="button button-secondary" type="submit">
+              ذخیره وضعیت
+            </button>
+          </form>
+        </article>
+      </section>
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .detail-page {
+    min-height: 78vh;
+    padding: clamp(2rem, 5vw, 4rem) 0;
+    background: linear-gradient(145deg, #f5f8f6, #fffaf7);
+  }
+
+  .detail-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .back-link {
+    color: #377c71;
+    font-size: .82rem;
+    font-weight: 900;
+    text-decoration: none;
+  }
+
+  .detail-header h1 {
+    margin: .45rem 0 .2rem;
+    color: #183d38;
+    font-size: clamp(2rem, 4vw, 3rem);
+  }
+
+  .detail-header p {
+    margin: 0;
+    color: #75817d;
+  }
+
+  .account-status {
+    padding: .5rem .75rem;
+    border-radius: 999px;
+    font-size: .78rem;
+    font-weight: 900;
+  }
+
+  .account-pending { background: #fbf0dd; color: #8d6326; }
+  .account-active { background: #e5f2ed; color: #2d6c63; }
+  .account-suspended { background: #f5e5e8; color: #873a46; }
+
+  .flash {
+    margin-bottom: .8rem;
+    padding: .85rem 1rem;
+    border-radius: 14px;
+    font-weight: 800;
+  }
+
+  .flash-success {
+    border: 1px solid #cfe5dc;
+    background: #eef8f4;
+    color: #2d6c63;
+  }
+
+  .flash-error {
+    border: 1px solid #efd1d7;
+    background: #fff7f8;
+    color: #9e3544;
+  }
+
+  .detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: .9rem;
+  }
+
+  .info-card,
+  .action-card,
+  .questionnaire-card {
+    padding: 1.3rem;
+    border: 1px solid #dfe8e4;
+    border-radius: 22px;
+    background: rgba(255,255,255,.88);
+    box-shadow: 0 12px 30px rgba(24,61,56,.06);
+  }
+
+  .info-card {
+    grid-row: span 2;
+  }
+
+  .info-card dl {
+    margin: 1rem 0 0;
+  }
+
+  .info-card dl div {
+    padding: .85rem 0;
+    border-bottom: 1px solid #edf1ef;
+  }
+
+  .info-card dl div:last-child {
+    border-bottom: 0;
+  }
+
+  .info-card dt {
+    color: #7a8782;
+    font-size: .76rem;
+  }
+
+  .info-card dd {
+    margin: .2rem 0 0;
+    color: #183d38;
+    font-weight: 900;
+  }
+
+  .action-card h2,
+  .questionnaire-card h2 {
+    margin: .55rem 0 .35rem;
+    color: #183d38;
+  }
+
+  .action-card p {
+    color: #6f7c77;
+    line-height: 1.85;
+  }
+
+  .action-row {
+    display: flex;
+    gap: .6rem;
+    flex-wrap: wrap;
+  }
+
+  .button {
+    min-height: 46px;
+    padding: .7rem .9rem;
+    border-radius: 14px;
+    font: inherit;
+    font-weight: 900;
+    cursor: pointer;
+  }
+
+  .button-primary {
+    border: 1px solid #2b6d63;
+    background: #377c71;
+    color: #fff;
+  }
+
+  .button-danger {
+    border: 1px solid #ead1d6;
+    background: #fff6f7;
+    color: #873a46;
+  }
+
+  .button-secondary {
+    border: 1px solid #cfded8;
+    background: #fff;
+    color: #2d6c63;
+  }
+
+  .questionnaire-form {
+    display: flex;
+    align-items: flex-end;
+    gap: .7rem;
+    margin-top: .9rem;
+  }
+
+  .questionnaire-form label {
+    flex: 1;
+  }
+
+  .questionnaire-form label span {
+    display: block;
+    margin-bottom: .4rem;
+    color: #183d38;
+    font-size: .82rem;
+    font-weight: 900;
+  }
+
+  .questionnaire-form select {
+    width: 100%;
+    min-height: 46px;
+    padding: 0 .8rem;
+    border: 1.5px solid #d2ddd8;
+    border-radius: 14px;
+    background: #fff;
+    color: #183d38;
+    font: inherit;
+  }
+
+  @media (max-width: 760px) {
+    .detail-header {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .detail-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .info-card {
+      grid-row: auto;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .questionnaire-form {
+      align-items: stretch;
+      flex-direction: column;
+    }
+  }
+</style>

@@ -1,0 +1,231 @@
+---
+export const prerender = false;
+
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { requireActiveAdmin } from '@/lib/server/admin-guard';
+import { getAdminCounts } from '@/lib/server/admin';
+
+Astro.response.headers.set('Cache-Control', 'private, no-store');
+Astro.response.headers.set('X-Robots-Tag', 'noindex, nofollow');
+
+const guard = await requireActiveAdmin(Astro);
+
+if (!guard.ok) {
+  return guard.response;
+}
+
+const counts = await getAdminCounts();
+---
+
+<BaseLayout
+  title="مدیریت Eat To Fit"
+  description="پنل مدیریت Eat To Fit"
+  noindex={true}
+>
+  <main class="admin-page">
+    <div class="container admin-shell">
+      <header class="admin-header">
+        <div>
+          <span class="admin-kicker">مدیریت Eat To Fit</span>
+          <h1>مرکز کنترل کلاینت‌ها</h1>
+          <p>
+            بررسی حساب‌های جدید، وضعیت دسترسی و آماده‌سازی مراحل بعدی از این
+            بخش انجام می‌شود.
+          </p>
+        </div>
+
+        <a class="primary-link" href="/admin/clients">
+          مشاهده کلاینت‌ها
+          <span aria-hidden="true">←</span>
+        </a>
+      </header>
+
+      <section class="stat-grid" aria-label="خلاصه کلاینت‌ها">
+        <article class="stat-card stat-card--primary">
+          <small>همه کلاینت‌ها</small>
+          <strong>{counts.total}</strong>
+          <span>حساب ثبت‌شده</span>
+        </article>
+
+        <article class="stat-card">
+          <small>در انتظار بررسی</small>
+          <strong>{counts.pending}</strong>
+          <span>نیازمند تصمیم شما</span>
+        </article>
+
+        <article class="stat-card">
+          <small>فعال</small>
+          <strong>{counts.active}</strong>
+          <span>دسترسی کامل</span>
+        </article>
+
+        <article class="stat-card">
+          <small>تعلیق‌شده</small>
+          <strong>{counts.suspended}</strong>
+          <span>دسترسی متوقف</span>
+        </article>
+      </section>
+
+      <section class="admin-action-panel">
+        <div>
+          <span class="eyebrow">مرحله فعلی</span>
+          <h2>بررسی و فعال‌سازی حساب‌ها</h2>
+          <p>
+            ابتدا مشخصات پروفایل را با اطلاعات پرسشنامه موجود در Google Drive
+            تطبیق دهید و فقط در صورت اطمینان حساب را فعال کنید.
+          </p>
+        </div>
+
+        <a class="secondary-link" href="/admin/clients">ورود به فهرست کلاینت‌ها</a>
+      </section>
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .admin-page {
+    min-height: 78vh;
+    padding: clamp(2rem, 5vw, 4.5rem) 0;
+    background:
+      radial-gradient(circle at 92% 7%, rgba(55,124,113,.15), transparent 28rem),
+      radial-gradient(circle at 4% 96%, rgba(124,55,66,.09), transparent 24rem),
+      linear-gradient(145deg, #f4f8f6, #fffaf7 54%, #edf5f2);
+  }
+
+  .admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 2rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .admin-kicker {
+    display: inline-flex;
+    padding: .45rem .75rem;
+    border-radius: 999px;
+    background: #e6f2ee;
+    color: #2d6c63;
+    font-size: .8rem;
+    font-weight: 900;
+  }
+
+  .admin-header h1 {
+    margin: .8rem 0 .45rem;
+    color: #183d38;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+  }
+
+  .admin-header p {
+    max-width: 680px;
+    margin: 0;
+    color: #6b7873;
+    line-height: 1.9;
+  }
+
+  .primary-link,
+  .secondary-link {
+    min-height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .55rem;
+    padding: .8rem 1rem;
+    border-radius: 15px;
+    font-weight: 900;
+    text-decoration: none;
+  }
+
+  .primary-link {
+    background: linear-gradient(135deg, #183d38, #377c71);
+    color: #fff;
+    box-shadow: 0 14px 30px rgba(24,61,56,.18);
+  }
+
+  .secondary-link {
+    border: 1px solid #cfded8;
+    background: #fff;
+    color: #2d6c63;
+  }
+
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: .9rem;
+  }
+
+  .stat-card {
+    min-height: 150px;
+    padding: 1.15rem;
+    border: 1px solid #dfe8e4;
+    border-radius: 22px;
+    background: rgba(255,255,255,.84);
+    box-shadow: 0 12px 30px rgba(24,61,56,.06);
+  }
+
+  .stat-card--primary {
+    color: #fff;
+    border-color: transparent;
+    background: linear-gradient(145deg, #183d38, #2d6c63);
+  }
+
+  .stat-card small,
+  .stat-card span {
+    display: block;
+    color: #74817d;
+  }
+
+  .stat-card--primary small,
+  .stat-card--primary span {
+    color: rgba(255,255,255,.72);
+  }
+
+  .stat-card strong {
+    display: block;
+    margin: .4rem 0;
+    color: #183d38;
+    font-size: 2.2rem;
+  }
+
+  .stat-card--primary strong {
+    color: #fff;
+  }
+
+  .admin-action-panel {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+    padding: 1.35rem 1.5rem;
+    border: 1px solid #dfe8e4;
+    border-radius: 24px;
+    background: rgba(255,255,255,.78);
+  }
+
+  .admin-action-panel h2 {
+    margin: .55rem 0 .35rem;
+    color: #183d38;
+  }
+
+  .admin-action-panel p {
+    max-width: 720px;
+    margin: 0;
+    color: #6e7b76;
+    line-height: 1.85;
+  }
+
+  @media (max-width: 900px) {
+    .stat-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  @media (max-width: 650px) {
+    .admin-header,
+    .admin-action-panel {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .stat-grid { grid-template-columns: 1fr; }
+  }
+</style>

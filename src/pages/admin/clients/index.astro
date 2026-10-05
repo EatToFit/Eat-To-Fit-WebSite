@@ -1,0 +1,301 @@
+---
+export const prerender = false;
+
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { requireActiveAdmin } from '@/lib/server/admin-guard';
+import { listClients } from '@/lib/server/admin';
+
+Astro.response.headers.set('Cache-Control', 'private, no-store');
+Astro.response.headers.set('X-Robots-Tag', 'noindex, nofollow');
+
+const guard = await requireActiveAdmin(Astro);
+
+if (!guard.ok) {
+  return guard.response;
+}
+
+const q = Astro.url.searchParams.get('q')?.trim() ?? '';
+const clients = await listClients(q);
+
+const statusFa = {
+  PENDING: 'در انتظار بررسی',
+  ACTIVE: 'فعال',
+  SUSPENDED: 'تعلیق‌شده',
+} as const;
+
+const questionnaireFa = {
+  NOT_RECEIVED: 'دریافت نشده',
+  RECEIVED: 'دریافت شده',
+  REVIEWED: 'بررسی شده',
+} as const;
+---
+
+<BaseLayout
+  title="کلاینت‌ها | Eat To Fit"
+  description="مدیریت کلاینت‌های Eat To Fit"
+  noindex={true}
+>
+  <main class="clients-page">
+    <div class="container">
+      <header class="clients-header">
+        <div>
+          <a class="back-link" href="/admin">← مدیریت</a>
+          <h1>کلاینت‌ها</h1>
+          <p>جست‌وجو، بررسی و مدیریت وضعیت حساب‌ها</p>
+        </div>
+
+        <form method="GET" class="search-form" role="search">
+          <input
+            type="search"
+            name="q"
+            value={q}
+            placeholder="نام، نام کاربری، ایمیل یا شماره همراه"
+            aria-label="جست‌وجوی کلاینت"
+          />
+          <button type="submit">جست‌وجو</button>
+        </form>
+      </header>
+
+      <section class="client-list">
+        {
+          clients.length === 0 ? (
+            <div class="empty-state">
+              <strong>کلاینتی پیدا نشد</strong>
+              <p>عبارت جست‌وجو را تغییر دهید یا بعداً دوباره بررسی کنید.</p>
+            </div>
+          ) : (
+            clients.map((client) => (
+              <a class="client-row" href={`/admin/clients/${client.id}`}>
+                <div class="client-avatar" aria-hidden="true">
+                  {(client.first_name?.[0] ?? client.username[0] ?? 'E').toUpperCase()}
+                </div>
+
+                <div class="client-main">
+                  <strong>
+                    {client.first_name || client.last_name
+                      ? `${client.first_name ?? ''} ${client.last_name ?? ''}`.trim()
+                      : client.username}
+                  </strong>
+                  <span>{client.email}</span>
+                </div>
+
+                <div class="client-meta">
+                  <small>پرسشنامه</small>
+                  <span>{questionnaireFa[client.questionnaire_status]}</span>
+                </div>
+
+                <div class="client-meta">
+                  <small>برنامه‌ها</small>
+                  <span>{client.meal_plan_count} نسخه</span>
+                </div>
+
+                <div class={`status-badge status-${client.account_status.toLowerCase()}`}>
+                  {statusFa[client.account_status]}
+                </div>
+              </a>
+            ))
+          )
+        }
+      </section>
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .clients-page {
+    min-height: 78vh;
+    padding: clamp(2rem, 5vw, 4rem) 0;
+    background: linear-gradient(145deg, #f6f9f7, #fffaf8);
+  }
+
+  .clients-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 1rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .back-link {
+    color: #377c71;
+    font-size: .82rem;
+    font-weight: 900;
+    text-decoration: none;
+  }
+
+  .clients-header h1 {
+    margin: .4rem 0 .2rem;
+    color: #183d38;
+    font-size: clamp(2rem, 4vw, 3rem);
+  }
+
+  .clients-header p {
+    margin: 0;
+    color: #75817d;
+  }
+
+  .search-form {
+    display: flex;
+    gap: .55rem;
+    min-width: min(100%, 480px);
+  }
+
+  .search-form input {
+    flex: 1;
+    min-height: 48px;
+    padding: 0 .9rem;
+    border: 1.5px solid #d2ddd8;
+    border-radius: 14px;
+    background: #fff;
+    color: #183d38;
+    font: inherit;
+    outline: 0;
+  }
+
+  .search-form input:focus {
+    border-color: #377c71;
+    box-shadow: 0 0 0 4px rgba(55,124,113,.11);
+  }
+
+  .search-form button {
+    min-height: 48px;
+    padding: 0 1rem;
+    border: 0;
+    border-radius: 14px;
+    background: #183d38;
+    color: #fff;
+    font: inherit;
+    font-weight: 900;
+    cursor: pointer;
+  }
+
+  .client-list {
+    display: grid;
+    gap: .7rem;
+  }
+
+  .client-row {
+    display: grid;
+    grid-template-columns: auto minmax(180px, 1.5fr) minmax(110px, .55fr) minmax(90px, .45fr) auto;
+    align-items: center;
+    gap: 1rem;
+    padding: .9rem 1rem;
+    border: 1px solid #dfe7e3;
+    border-radius: 18px;
+    background: rgba(255,255,255,.9);
+    color: inherit;
+    text-decoration: none;
+    box-shadow: 0 8px 22px rgba(24,61,56,.045);
+    transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease;
+  }
+
+  .client-row:hover {
+    transform: translateY(-1px);
+    border-color: #b7cbc3;
+    box-shadow: 0 12px 28px rgba(24,61,56,.075);
+  }
+
+  .client-avatar {
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    border-radius: 14px;
+    background: #e7f2ee;
+    color: #2b6d63;
+    font-weight: 900;
+  }
+
+  .client-main strong,
+  .client-main span,
+  .client-meta small,
+  .client-meta span {
+    display: block;
+  }
+
+  .client-main strong {
+    color: #183d38;
+  }
+
+  .client-main span,
+  .client-meta small {
+    color: #7b8782;
+    font-size: .76rem;
+  }
+
+  .client-meta span {
+    margin-top: .15rem;
+    color: #465852;
+    font-size: .84rem;
+    font-weight: 800;
+  }
+
+  .status-badge {
+    padding: .45rem .7rem;
+    border-radius: 999px;
+    font-size: .75rem;
+    font-weight: 900;
+    white-space: nowrap;
+  }
+
+  .status-pending {
+    background: #fbf0dd;
+    color: #8d6326;
+  }
+
+  .status-active {
+    background: #e5f2ed;
+    color: #2d6c63;
+  }
+
+  .status-suspended {
+    background: #f5e5e8;
+    color: #873a46;
+  }
+
+  .empty-state {
+    padding: 2rem;
+    border: 1px dashed #cddbd5;
+    border-radius: 20px;
+    background: rgba(255,255,255,.7);
+    text-align: center;
+  }
+
+  .empty-state strong {
+    color: #183d38;
+  }
+
+  .empty-state p {
+    color: #75817d;
+  }
+
+  @media (max-width: 850px) {
+    .clients-header {
+      align-items: stretch;
+      flex-direction: column;
+    }
+
+    .client-row {
+      grid-template-columns: auto 1fr auto;
+    }
+
+    .client-meta {
+      display: none;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .client-row {
+      grid-template-columns: auto 1fr;
+    }
+
+    .status-badge {
+      grid-column: 2;
+      width: fit-content;
+    }
+
+    .search-form {
+      min-width: 0;
+    }
+  }
+</style>
