@@ -1,0 +1,187 @@
+---
+import '@/styles/global.css';
+import '@/styles/clerk-auth.css';
+import Logo from '@/components/Logo.astro';
+import { siteConfig, publicSiteUrl } from '@/config/site';
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+const canonical = publicSiteUrl ? `${publicSiteUrl}${Astro.url.pathname}` : '';
+---
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#183d38" />
+    <meta name="description" content={description} />
+    <meta name="robots" content="noindex,nofollow" />
+    {canonical && <link rel="canonical" href={canonical} />}
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="fa_IR" />
+    <meta property="og:site_name" content={siteConfig.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <title>{title}</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/site.webmanifest" />
+  </head>
+  <body class="auth-body">
+    <a class="skip-link" href="#auth-main">پرش به محتوای اصلی</a>
+
+    <header class="auth-topbar" aria-label="نوار بالای حساب کاربری">
+      <div class="container auth-topbar-inner">
+        <Logo compact />
+        <a class="back-home" href="/" aria-label="بازگشت به صفحه اصلی">
+          <span>بازگشت به سایت</span>
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+    </header>
+
+    <main id="auth-main"><slot /></main>
+
+    <footer class="auth-footer">
+      <div class="container auth-footer-inner">
+        <span>© {new Date().getFullYear()} Eat To Fit</span>
+        <span class="auth-footer-dot" aria-hidden="true"></span>
+        <span>فضای شخصی شما با دسترسی امن</span>
+      </div>
+    </footer>
+  </body>
+</html>
+
+<style is:global>
+  .auth-body {
+    min-height: 100vh;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    color: var(--ink);
+    background:
+      radial-gradient(circle at 82% 8%, rgba(55,124,113,.28), transparent 26rem),
+      radial-gradient(circle at 9% 92%, rgba(124,55,66,.18), transparent 24rem),
+      linear-gradient(135deg, #e9f1ed 0%, #f7f2ee 48%, #edf4f1 100%);
+  }
+
+  .auth-body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: .28;
+    background-image:
+      linear-gradient(rgba(24,61,56,.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(24,61,56,.035) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(circle at 50% 45%, black 10%, transparent 76%);
+  }
+
+  .auth-topbar {
+    position: relative;
+    z-index: 20;
+    padding: 16px 0 0;
+  }
+
+  .auth-topbar-inner {
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 6px 10px 6px 12px;
+    border-radius: 18px;
+    border: 1px solid rgba(205,217,211,.92);
+    background: rgba(255,253,250,.78);
+    box-shadow: 0 12px 36px rgba(24,61,56,.08);
+    backdrop-filter: blur(18px) saturate(1.15);
+  }
+
+  .back-home {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 8px 11px 8px 13px;
+    border-radius: 13px;
+    color: var(--primary-800);
+    font-size: .84rem;
+    font-weight: 850;
+    transition: transform .2s var(--ease), background .2s var(--ease), box-shadow .2s var(--ease);
+  }
+  .back-home svg { width: 18px; height: 18px; }
+  .back-home:hover { transform: translateX(-2px); background: var(--primary-50); box-shadow: inset 0 0 0 1px var(--primary-100); }
+  .back-home:active { transform: scale(.97); }
+
+  .auth-footer { display: none; }
+  .auth-footer-inner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    color: #72807b;
+    font-size: .74rem;
+  }
+  .auth-footer-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--primary-300); }
+
+  @media (max-width: 560px) {
+    .auth-topbar { padding-top: 10px; }
+    .auth-topbar-inner { min-height: 54px; border-radius: 18px; }
+    .back-home span { display: none; }
+    .back-home { width: 40px; justify-content: center; padding: 0; }
+    .auth-footer-inner { gap: 7px; font-size: .68rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .back-home { transition: none; }
+  }
+</style>
+
+<style is:global>
+  /* v2.3 — deterministic viewport-fit contract */
+  html:has(.auth-body),
+  body.auth-body {
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+    overflow: hidden;
+  }
+
+  .auth-body {
+    height: 100dvh;
+    min-height: 100dvh;
+    grid-template-rows: auto minmax(0, 1fr);
+  }
+
+  .auth-body > main {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .auth-topbar {
+    flex: 0 0 auto;
+    padding-top: 8px;
+  }
+
+  .auth-topbar-inner {
+    min-height: 50px;
+    padding-block: 5px;
+  }
+
+  .auth-footer { display: none !important; }
+
+  @media (max-width: 820px) {
+    .auth-topbar { padding-top: 6px; }
+    .auth-topbar-inner { min-height: 46px; }
+  }
+
+  @media (max-height: 680px) {
+    .auth-topbar { padding-top: 4px; }
+    .auth-topbar-inner { min-height: 44px; }
+  }
+</style>

@@ -1,0 +1,27 @@
+export const authAppearance = {
+  variables: {
+    colorPrimary: '#377c71',
+    colorPrimaryForeground: '#ffffff',
+    colorForeground: '#183d38',
+    colorMutedForeground: '#6f7d78',
+    colorBackground: '#ffffff',
+    colorInputBackground: '#ffffff',
+    colorInputForeground: '#183d38',
+    colorBorder: '#d6e1dc',
+    colorNeutral: '#dfe7e3',
+    colorDanger: '#b44756',
+    colorSuccess: '#377c71',
+    colorWarning: '#a77835',
+    colorRing: '#377c71',
+    borderRadius: '16px',
+    fontFamily: '"Vazirmatn", "IRANSansX", "IRANSansFaNum", Tahoma, Arial, sans-serif',
+    fontFamilyButtons: '"Vazirmatn", "IRANSansX", "IRANSansFaNum", Tahoma, Arial, sans-serif',
+  },
+  elements: {
+    rootBox: { width: '100%' },
+    cardBox: { width: '100%', boxShadow: 'none', background: 'transparent' },
+    card: { width: '100%', boxShadow: 'none', border: 'none', background: 'transparent', padding: '0' },
+    header: { display: 'none' },
+    footer: { background: 'transparent', border: 'none', padding: '0' },
+  },
+};

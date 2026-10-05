@@ -1,0 +1,430 @@
+---
+interface Props {
+  mode: 'signin' | 'signup';
+}
+
+const { mode } = Astro.props;
+const isSignUp = mode === 'signup';
+---
+<section class:list={['auth-stage', isSignUp && 'is-signup', !isSignUp && 'is-signin']}>
+  <div class="auth-stage-blob blob-one" aria-hidden="true"></div>
+  <div class="auth-stage-blob blob-two" aria-hidden="true"></div>
+
+  <div class="container auth-stage-inner">
+    <aside class="auth-story" aria-label="معرفی فضای شخصی Eat To Fit">
+      <div class="story-ribbon" aria-hidden="true">EAT TO FIT</div>
+      <div class="story-orbit orbit-one" aria-hidden="true"></div>
+      <div class="story-orbit orbit-two" aria-hidden="true"></div>
+
+      <div class="story-content">
+        <div class="story-chip">
+          <span class="story-chip-dot"></span>
+          <span>{isSignUp ? 'شروع فضای شخصی شما' : 'بازگشت به فضای شخصی'}</span>
+        </div>
+
+        <h1>
+          {isSignUp ? (
+            <>مسیر شما، این بار <span>منظم‌تر و شخصی‌تر</span></>
+          ) : (
+            <>برنامه‌هایتان، همیشه در <span>فضای شخصی شما</span></>
+          )}
+        </h1>
+
+        <p class="story-copy">
+          {isSignUp
+            ? 'یک حساب امن برای دسترسی به برنامه‌های فعلی، نسخه‌های بعدی و سوابق شما؛ بدون جست‌وجوی لینک‌های پراکنده.'
+            : 'با ورود به حساب، برنامه فعلی و سوابق شما در یک فضای منظم و خصوصی در دسترس خواهد بود.'}
+        </p>
+
+        <div class="story-cards" aria-label="قابلیت‌های فضای شخصی">
+          <article class="story-card story-card-primary">
+            <div class="story-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M7 9h10M7 13h7M7 17h5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+            </div>
+            <div>
+              <span>برنامه فعلی</span>
+              <strong>یک دسترسی ثابت و شخصی</strong>
+            </div>
+          </article>
+
+          <article class="story-card">
+            <div class="story-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 8v5l3 2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.7"/></svg>
+            </div>
+            <div>
+              <span>سوابق</span>
+              <strong>نسخه‌های قبلی در یکجا</strong>
+            </div>
+          </article>
+
+          <article class="story-card">
+            <div class="story-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9ZM10 21h4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div>
+              <span>اعلان‌ها</span>
+              <strong>اطلاع‌رسانی برنامه جدید</strong>
+            </div>
+          </article>
+        </div>
+
+        <div class="story-security">
+          <div class="security-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 4.8 3 8.4 7 10 4-1.6 7-5.2 7-10V6l-7-3Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="m9 12 2 2 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div>
+            <strong>دسترسی خصوصی و کنترل‌شده</strong>
+            <span>اطلاعات ورود شما از پرسشنامه غذایی جدا نگهداری می‌شود.</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <section class="auth-form-panel" aria-label={isSignUp ? 'فرم ساخت حساب' : 'فرم ورود'}>
+      <div class="panel-accent" aria-hidden="true"></div>
+      <div class="panel-heading">
+        <div class="panel-heading-icon" aria-hidden="true">
+          {isSignUp ? (
+            <svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM4.5 21a7.5 7.5 0 0 1 15 0M19 8v6M16 11h6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          ) : (
+            <svg viewBox="0 0 24 24"><path d="M8 10V8a4 4 0 1 1 8 0v2M6 10h12a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 14v3" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+          )}
+        </div>
+        <div>
+          <span class="panel-overline">{isSignUp ? 'عضویت در Eat To Fit' : 'ورود امن'}</span>
+          <h2>{isSignUp ? 'ساخت حساب کاربری' : 'ورود به حساب کاربری'}</h2>
+          <p>{isSignUp ? 'حساب خود را بسازید و پس از تأیید ایمیل، ادامه دهید.' : 'نام کاربری و رمز عبور خود را وارد کنید.'}</p>
+        </div>
+      </div>
+
+      <div class="clerk-surface">
+        <slot />
+      </div>
+
+      <div class="panel-note">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 5 6v5c0 4.8 3 8.4 7 10 4-1.6 7-5.2 7-10V6l-7-3Z" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linejoin="round"/></svg>
+        <span>جزئیات برنامه فقط بعد از ورود به حساب شخصی نمایش داده می‌شود.</span>
+      </div>
+    </section>
+  </div>
+</section>
+
+<style>
+  .auth-stage {
+    position: relative;
+    min-height: calc(100vh - 150px);
+    display: grid;
+    align-items: center;
+    overflow: hidden;
+    padding: clamp(28px, 5vw, 64px) 0;
+  }
+
+  .auth-stage-blob { position: absolute; border-radius: 50%; pointer-events: none; filter: blur(10px); }
+  .blob-one { width: 380px; height: 380px; top: 6%; right: -130px; background: rgba(55,124,113,.14); }
+  .blob-two { width: 330px; height: 330px; bottom: -120px; left: -110px; background: rgba(124,55,66,.11); }
+
+  .auth-stage-inner {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: minmax(0, 1.08fr) minmax(400px, .78fr);
+    gap: clamp(24px, 4vw, 54px);
+    align-items: stretch;
+  }
+
+  .auth-story {
+    position: relative;
+    min-height: 660px;
+    overflow: hidden;
+    padding: clamp(32px, 4.2vw, 58px);
+    border-radius: 40px;
+    color: #fff;
+    background:
+      radial-gradient(circle at 10% 12%, rgba(255,255,255,.12), transparent 15rem),
+      radial-gradient(circle at 88% 82%, rgba(124,55,66,.40), transparent 24rem),
+      linear-gradient(145deg, #102d29 0%, #183d38 55%, #2b665d 100%);
+    border: 1px solid rgba(255,255,255,.12);
+    box-shadow: 0 34px 90px rgba(16,45,41,.25), inset 0 1px 0 rgba(255,255,255,.08);
+  }
+
+  .story-ribbon {
+    position: absolute;
+    left: -24px;
+    top: 28px;
+    transform: rotate(-90deg) translateX(-100%);
+    transform-origin: left top;
+    letter-spacing: .28em;
+    font-size: .64rem;
+    font-weight: 900;
+    color: rgba(255,255,255,.28);
+  }
+
+  .story-orbit { position: absolute; border-radius: 50%; border: 1px solid rgba(255,255,255,.07); }
+  .orbit-one { width: 360px; height: 360px; left: -140px; top: -100px; }
+  .orbit-two { width: 220px; height: 220px; left: -40px; top: -30px; }
+
+  .story-content { position: relative; z-index: 2; max-width: 760px; }
+  .story-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 8px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,.14);
+    background: rgba(255,255,255,.07);
+    color: rgba(255,255,255,.88);
+    font-size: .78rem;
+    font-weight: 850;
+    backdrop-filter: blur(10px);
+  }
+  .story-chip-dot { width: 8px; height: 8px; border-radius: 50%; background: #cce7e1; box-shadow: 0 0 0 6px rgba(204,231,225,.10); }
+
+  .auth-story h1 {
+    max-width: 760px;
+    margin: 24px 0 16px;
+    font-size: clamp(2.4rem, 4.8vw, 4.6rem);
+    line-height: 1.16;
+    letter-spacing: -.045em;
+    font-weight: 950;
+  }
+  .auth-story h1 span { color: #cce7e1; text-shadow: 0 10px 28px rgba(184,221,213,.13); }
+  .story-copy { max-width: 670px; margin: 0; color: rgba(255,255,255,.72); line-height: 2; font-size: 1rem; }
+
+  .story-cards { margin-top: 34px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .story-card {
+    min-height: 126px;
+    display: grid;
+    align-content: space-between;
+    gap: 14px;
+    padding: 17px;
+    border-radius: 21px;
+    border: 1px solid rgba(255,255,255,.10);
+    background: rgba(255,255,255,.055);
+    backdrop-filter: blur(10px);
+  }
+  .story-card-primary { background: linear-gradient(145deg, rgba(204,231,225,.16), rgba(255,255,255,.055)); border-color: rgba(204,231,225,.21); }
+  .story-card-icon { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 14px; color: #cce7e1; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.10); }
+  .story-card-icon svg { width: 21px; height: 21px; }
+  .story-card span { display: block; color: rgba(255,255,255,.53); font-size: .67rem; }
+  .story-card strong { display: block; margin-top: 4px; color: rgba(255,255,255,.92); font-size: .82rem; line-height: 1.7; }
+
+  .story-security {
+    margin-top: 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    border-radius: 18px;
+    border: 1px solid rgba(255,255,255,.10);
+    background: rgba(5,25,22,.18);
+  }
+  .security-icon { flex: 0 0 auto; width: 42px; height: 42px; display: grid; place-items: center; border-radius: 14px; color: #cce7e1; background: rgba(255,255,255,.07); }
+  .security-icon svg { width: 21px; height: 21px; }
+  .story-security strong { display: block; font-size: .8rem; }
+  .story-security span { display: block; margin-top: 3px; color: rgba(255,255,255,.55); font-size: .68rem; line-height: 1.7; }
+
+  .auth-form-panel {
+    position: relative;
+    align-self: center;
+    overflow: hidden;
+    padding: clamp(24px, 3vw, 34px);
+    border-radius: 34px;
+    border: 1px solid #d8e2dd;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.98) 0%, rgba(250,252,251,.96) 100%);
+    box-shadow: 0 30px 80px rgba(24,61,56,.14), 0 8px 24px rgba(24,61,56,.06), inset 0 1px 0 rgba(255,255,255,1);
+    backdrop-filter: blur(18px);
+  }
+  .panel-accent { position: absolute; inset: 0 0 auto 0; height: 5px; background: linear-gradient(90deg, #7c3742, #377c71 46%, #183d38); }
+
+  .panel-heading {
+    display: grid;
+    grid-template-columns: 54px 1fr;
+    gap: 14px;
+    align-items: center;
+    padding: 4px 0 22px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #e1e7e4;
+  }
+  .panel-heading-icon { width: 54px; height: 54px; display: grid; place-items: center; border-radius: 18px; color: #fff; background: linear-gradient(145deg,#377c71,#183d38); box-shadow: 0 14px 28px rgba(24,61,56,.24), inset 0 1px 0 rgba(255,255,255,.16); }
+  .panel-heading-icon svg { width: 25px; height: 25px; }
+  .panel-overline { display: block; color: #377c71; font-size: .69rem; font-weight: 900; }
+  .panel-heading h2 { margin: 3px 0 2px; color: #183d38; font-size: 1.36rem; line-height: 1.45; }
+  .panel-heading p { margin: 0; color: #73807b; font-size: .78rem; line-height: 1.75; }
+
+  .clerk-surface {
+    position: relative;
+    padding: 18px;
+    border-radius: 24px;
+    border: 1px solid #e1e7e4;
+    background: linear-gradient(180deg, #fff 0%, #fbfcfb 100%);
+    box-shadow: inset 0 1px 0 #fff, 0 10px 28px rgba(24,61,56,.045);
+  }
+
+  .panel-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    margin-top: 16px;
+    padding: 12px 13px;
+    border-radius: 15px;
+    color: #6f7d78;
+    background: #f2f6f4;
+    border: 1px solid #dce6e1;
+    font-size: .69rem;
+    line-height: 1.8;
+  }
+  .panel-note svg { flex: 0 0 auto; width: 18px; height: 18px; color: #377c71; margin-top: 2px; }
+
+  @media (max-width: 1040px) {
+    .auth-stage-inner { grid-template-columns: minmax(0,1fr) minmax(380px,.82fr); gap: 22px; }
+    .auth-story { min-height: 610px; padding: 34px; }
+    .story-cards { grid-template-columns: 1fr; }
+    .story-card { min-height: 82px; grid-template-columns: 42px 1fr; align-items: center; align-content: center; }
+  }
+
+  @media (max-width: 820px) {
+    .auth-stage { padding-top: 22px; }
+    .auth-stage-inner { grid-template-columns: 1fr; max-width: 620px; gap: 16px; }
+    .auth-story { min-height: auto; padding: 28px; border-radius: 30px; }
+    .auth-story h1 { font-size: clamp(2rem,8vw,3.2rem); }
+    .story-cards { grid-template-columns: repeat(3,1fr); }
+    .story-card { min-height: 110px; display: grid; grid-template-columns: 1fr; align-content: space-between; }
+    .auth-form-panel { border-radius: 30px; }
+  }
+
+  @media (max-width: 560px) {
+    .auth-stage { padding: 16px 0 32px; }
+    .auth-stage-inner { width: min(calc(100% - 20px), var(--container)); }
+    .auth-story { padding: 24px 20px; border-radius: 26px; }
+    .auth-story h1 { font-size: 2.15rem; margin-top: 18px; }
+    .story-copy { font-size: .88rem; line-height: 1.9; }
+    .story-cards { grid-template-columns: 1fr; margin-top: 22px; }
+    .story-card { min-height: 78px; grid-template-columns: 42px 1fr; align-items: center; align-content: center; }
+    .story-security { display: none; }
+    .auth-form-panel { padding: 18px 14px; border-radius: 26px; }
+    .panel-heading { grid-template-columns: 46px 1fr; gap: 11px; padding-bottom: 17px; margin-bottom: 14px; }
+    .panel-heading-icon { width: 46px; height: 46px; border-radius: 15px; }
+    .panel-heading h2 { font-size: 1.14rem; }
+    .panel-heading p { font-size: .7rem; }
+    .clerk-surface { padding: 12px; border-radius: 19px; }
+  }
+</style>
+
+<style>
+  /* v2.3 — Fit-to-page without clipping at 100% browser zoom */
+  .auth-stage {
+    height: 100%;
+    min-height: 0;
+    padding: 8px 0 10px;
+  }
+
+  .auth-stage-inner {
+    width: min(calc(100% - 28px), var(--container));
+    height: 100%;
+    min-height: 0;
+    align-items: stretch;
+    gap: clamp(18px, 2.5vw, 32px);
+  }
+
+  .auth-story {
+    height: 100%;
+    min-height: 0;
+    padding: clamp(22px, 3vh, 34px);
+    border-radius: 32px;
+  }
+
+  .auth-form-panel {
+    align-self: center;
+    width: 100%;
+    max-height: 100%;
+    padding: 14px 16px;
+    border-radius: 26px;
+  }
+
+  .panel-heading {
+    grid-template-columns: 42px 1fr;
+    gap: 10px;
+    padding: 0 0 9px;
+    margin-bottom: 9px;
+  }
+
+  .panel-heading-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 13px;
+  }
+
+  .panel-heading-icon svg { width: 20px; height: 20px; }
+  .panel-overline { font-size: .62rem; }
+  .panel-heading h2 { margin: 1px 0; font-size: 1.02rem; }
+  .panel-heading p { font-size: .64rem; line-height: 1.5; }
+
+  .clerk-surface {
+    padding: 8px;
+    border-radius: 18px;
+  }
+
+  .panel-note { display: none; }
+
+  @media (max-height: 840px) and (min-width: 821px) {
+    .auth-stage-inner { grid-template-columns: minmax(0, 1.08fr) minmax(360px, .78fr); }
+    .auth-story { padding: 22px 28px; border-radius: 30px; }
+    .auth-story h1 { margin: 14px 0 8px; font-size: clamp(2rem, 3.6vw, 3.2rem); }
+    .story-copy { font-size: .82rem; line-height: 1.65; }
+    .story-cards { margin-top: 16px; gap: 8px; }
+    .story-card { min-height: 82px; padding: 11px; grid-template-columns: 32px 1fr; align-items: center; align-content: center; gap: 8px; }
+    .story-card-icon { width: 32px; height: 32px; border-radius: 10px; }
+    .story-card-icon svg { width: 17px; height: 17px; }
+    .story-card span { font-size: .61rem; }
+    .story-card strong { font-size: .74rem; }
+    .story-security { margin-top: 9px; padding: 8px 10px; }
+    .security-icon { width: 32px; height: 32px; border-radius: 10px; }
+  }
+
+  @media (max-height: 720px) and (min-width: 821px) {
+    .story-copy, .story-security { display: none; }
+    .auth-story h1 { font-size: 2.15rem; margin-top: 12px; }
+    .story-cards { margin-top: 14px; }
+    .story-card { min-height: 68px; }
+    .auth-form-panel { padding: 10px 12px; border-radius: 22px; }
+    .panel-heading { grid-template-columns: 36px 1fr; gap: 8px; padding-bottom: 6px; margin-bottom: 6px; }
+    .panel-heading-icon { width: 36px; height: 36px; border-radius: 11px; }
+    .panel-heading p { display: none; }
+    .clerk-surface { padding: 6px; border-radius: 15px; }
+  }
+
+  @media (max-width: 820px) {
+    .auth-stage { padding: 6px 0 8px; }
+    .auth-stage-inner {
+      display: grid;
+      grid-template-columns: 1fr;
+      width: min(calc(100% - 16px), 560px);
+      max-width: 560px;
+      height: 100%;
+      min-height: 0;
+      align-items: center;
+      gap: 0;
+    }
+    .auth-story { display: none; }
+    .auth-form-panel { width: 100%; max-width: 540px; max-height: 100%; padding: 10px 12px; border-radius: 22px; }
+    .panel-heading { grid-template-columns: 38px 1fr; gap: 8px; padding: 0 0 7px; margin-bottom: 7px; }
+    .panel-heading-icon { width: 38px; height: 38px; border-radius: 12px; }
+    .panel-heading-icon svg { width: 19px; height: 19px; }
+    .panel-heading h2 { font-size: .95rem; }
+    .panel-heading p { display: none; }
+    .clerk-surface { padding: 6px; border-radius: 15px; }
+  }
+
+  @media (max-width: 520px) {
+    .auth-stage { padding: 4px 0 6px; }
+    .auth-stage-inner { width: min(calc(100% - 10px), 520px); }
+    .auth-form-panel { padding: 8px; border-radius: 19px; }
+    .panel-accent { height: 3px; }
+    .panel-heading { grid-template-columns: 34px 1fr; gap: 7px; padding-bottom: 5px; margin-bottom: 5px; }
+    .panel-heading-icon { width: 34px; height: 34px; border-radius: 10px; }
+    .panel-overline { font-size: .56rem; }
+    .panel-heading h2 { font-size: .88rem; }
+    .clerk-surface { padding: 5px; border-radius: 13px; }
+  }
+</style>

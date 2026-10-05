@@ -1,0 +1,20 @@
+---
+import AuthLayout from '@/layouts/AuthLayout.astro';
+import AuthShell from '@/components/auth/AuthShell.astro';
+import { SignIn } from '@clerk/astro/components';
+import { authAppearance } from '@/config/authAppearance';
+---
+<AuthLayout
+  title="ورود به حساب | Eat To Fit"
+  description="ورود به فضای شخصی Eat To Fit"
+>
+  <AuthShell mode="signin">
+    <SignIn
+      routing="path"
+      path="/sign-in"
+      signUpUrl="/sign-up"
+      fallbackRedirectUrl="/account-ready"
+      appearance={authAppearance}
+    />
+  </AuthShell>
+</AuthLayout>

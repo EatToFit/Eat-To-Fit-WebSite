@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "@astrojs/cloudflare": "14.3.3",
+    "@clerk/astro": "^4.1.9",
+    "@clerk/localizations": "^4.21.2",
     "astro": "^7.3.5"
   },
   "devDependencies": {

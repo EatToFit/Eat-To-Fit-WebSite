@@ -1,5 +1,7 @@
 import { defineConfig } from 'astro/config';
 import cloudflare from '@astrojs/cloudflare';
+import clerk from '@clerk/astro';
+import { faIR } from '@clerk/localizations';
 
 export default defineConfig({
   output: 'server',
@@ -7,6 +9,12 @@ export default defineConfig({
   adapter: cloudflare({
     imageService: 'compile',
   }),
+
+  integrations: [
+    clerk({
+      localization: faIR,
+    }),
+  ],
 
   session: false,
 
