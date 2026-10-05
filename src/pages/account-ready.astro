@@ -31,8 +31,11 @@ if (!isClientProfileComplete(profile)) {
   return Astro.redirect('/app/onboarding');
 }
 
+if (appUser.account_status === 'ACTIVE') {
+  return Astro.redirect('/app');
+}
+
 const isPending = appUser.account_status === 'PENDING';
-const isActive = appUser.account_status === 'ACTIVE';
 const isSuspended = appUser.account_status === 'SUSPENDED';
 ---
 
@@ -52,14 +55,6 @@ const isSuspended = appUser.account_status === 'SUSPENDED';
               پروفایل شما تکمیل شده است. پس از تطبیق اطلاعات و بررسی نهایی،
               دسترسی شخصی شما فعال خواهد شد.
             </p>
-          </div>
-        )}
-
-        {isActive && (
-          <div class="account-state">
-            <span class="eyebrow">حساب فعال</span>
-            <h1 id="account-status-title">حساب شما فعال است</h1>
-            <p>فضای شخصی شما آماده استفاده است.</p>
           </div>
         )}
 
@@ -93,15 +88,13 @@ const isSuspended = appUser.account_status === 'SUSPENDED';
     padding: clamp(2rem, 6vw, 5rem) 0;
   }
 
-  .account-container {
-    width: 100%;
-  }
+  .account-container { width: 100%; }
 
   .account-state-card {
     width: min(100%, 760px);
     margin-inline: auto;
     padding: clamp(1.5rem, 4vw, 2.5rem);
-    border: 1px solid rgba(55, 124, 113, 0.16);
+    border: 1px solid rgba(55,124,113,.16);
     border-radius: 28px;
     background: linear-gradient(145deg, rgba(255,255,255,.97), rgba(247,251,249,.94));
     box-shadow: 0 24px 70px rgba(24,61,56,.10), inset 0 1px 0 rgba(255,255,255,.9);
@@ -120,7 +113,5 @@ const isSuspended = appUser.account_status === 'SUSPENDED';
     line-height: 2;
   }
 
-  .account-actions {
-    margin-top: 1.75rem;
-  }
+  .account-actions { margin-top: 1.75rem; }
 </style>

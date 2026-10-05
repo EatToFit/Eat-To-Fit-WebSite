@@ -1,0 +1,639 @@
+---
+export const prerender = false;
+
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { SignOutButton } from '@clerk/astro/components';
+import { ensureApplicationUser } from '@/lib/server/app-user';
+import {
+  getClientProfile,
+  isClientProfileComplete,
+} from '@/lib/server/client-profile';
+import { getDashboardSummary } from '@/lib/server/dashboard';
+
+Astro.response.headers.set('Cache-Control', 'private, no-store');
+Astro.response.headers.set('X-Robots-Tag', 'noindex, nofollow');
+
+const { isAuthenticated } = Astro.locals.auth();
+
+if (!isAuthenticated) {
+  return Astro.redirect('/sign-in');
+}
+
+const clerkUser = await Astro.locals.currentUser();
+
+if (!clerkUser) {
+  return Astro.redirect('/sign-in');
+}
+
+const appUser = await ensureApplicationUser(clerkUser);
+const profile = await getClientProfile(appUser.id);
+
+if (!isClientProfileComplete(profile)) {
+  return Astro.redirect('/app/onboarding');
+}
+
+if (appUser.account_status !== 'ACTIVE') {
+  return Astro.redirect('/account-ready');
+}
+
+const dashboard = await getDashboardSummary(appUser.id);
+
+const displayName =
+  profile?.first_name?.trim() ||
+  clerkUser.firstName?.trim() ||
+  'همراه Eat To Fit';
+
+const questionnaireLabel =
+  profile?.questionnaire_status === 'REVIEWED'
+    ? 'بررسی شده'
+    : profile?.questionnaire_status === 'RECEIVED'
+      ? 'دریافت شده'
+      : 'هنوز دریافت نشده';
+---
+
+<BaseLayout
+  title="فضای شخصی | Eat To Fit"
+  description="فضای شخصی Eat To Fit"
+  noindex={true}
+>
+  <main class="client-app">
+    <div class="app-glow app-glow--one" aria-hidden="true"></div>
+    <div class="app-glow app-glow--two" aria-hidden="true"></div>
+
+    <div class="container app-shell">
+      <header class="app-header">
+        <div>
+          <span class="app-kicker">فضای شخصی شما</span>
+          <h1>سلام {displayName}</h1>
+          <p>
+            برنامه‌ها، سوابق و وضعیت حساب شما از همین‌جا در دسترس خواهد بود.
+          </p>
+        </div>
+
+        <div class="header-actions">
+          <a class="ghost-action" href="/app/profile">پروفایل</a>
+          <SignOutButton redirectUrl="/">
+            <button class="ghost-action" type="button">خروج</button>
+          </SignOutButton>
+        </div>
+      </header>
+
+      <section class="status-strip" aria-label="وضعیت حساب">
+        <div class="status-pill">
+          <span class="status-dot"></span>
+          <div>
+            <small>وضعیت حساب</small>
+            <strong>فعال</strong>
+          </div>
+        </div>
+
+        <div class="status-pill">
+          <div class="status-icon" aria-hidden="true">✓</div>
+          <div>
+            <small>پرسشنامه</small>
+            <strong>{questionnaireLabel}</strong>
+          </div>
+        </div>
+
+        <div class="status-pill">
+          <div class="status-icon" aria-hidden="true">↺</div>
+          <div>
+            <small>سوابق برنامه</small>
+            <strong>{dashboard.previousPlansCount} نسخه</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="dashboard-grid">
+        <article class="primary-card">
+          <div class="card-heading">
+            <div>
+              <span class="eyebrow">برنامه فعلی</span>
+              <h2>
+                {
+                  dashboard.currentPlan
+                    ? dashboard.currentPlan.title
+                    : 'هنوز برنامه‌ای منتشر نشده است'
+                }
+              </h2>
+            </div>
+
+            <div class="plan-mark" aria-hidden="true">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+
+          {
+            dashboard.currentPlan ? (
+              <>
+                <div class="plan-meta">
+                  <span>نسخه {dashboard.currentPlan.version}</span>
+                  {
+                    dashboard.currentPlan.published_at && (
+                      <span>
+                        تاریخ انتشار:{' '}
+                        {new Date(
+                          dashboard.currentPlan.published_at,
+                        ).toLocaleDateString('fa-IR')}
+                      </span>
+                    )
+                  }
+                </div>
+
+                <a
+                  class="primary-action"
+                  href={`/app/plans/${dashboard.currentPlan.public_id}`}
+                >
+                  مشاهده برنامه
+                  <span aria-hidden="true">←</span>
+                </a>
+              </>
+            ) : (
+              <div class="empty-plan">
+                <p>
+                  وقتی برنامه شما آماده و منتشر شود، در همین بخش نمایش داده
+                  خواهد شد.
+                </p>
+
+                <span class="waiting-badge">در انتظار برنامه</span>
+              </div>
+            )
+          }
+        </article>
+
+        <aside class="side-stack">
+          <article class="mini-card">
+            <div class="mini-icon" aria-hidden="true">◎</div>
+            <div>
+              <small>پروفایل</small>
+              <h3>{profile?.first_name} {profile?.last_name}</h3>
+              <p>اطلاعات حساب و شماره همراه شما</p>
+            </div>
+            <a href="/app/profile" class="mini-link">مشاهده</a>
+          </article>
+
+          <article class="mini-card">
+            <div class="mini-icon mini-icon--wine" aria-hidden="true">≡</div>
+            <div>
+              <small>برنامه‌های قبلی</small>
+              <h3>{dashboard.previousPlansCount} نسخه</h3>
+              <p>دسترسی به نسخه‌هایی که قبلاً برای شما منتشر شده‌اند</p>
+            </div>
+            <a href="/app/plans" class="mini-link">مشاهده</a>
+          </article>
+        </aside>
+      </section>
+
+      <section class="app-note">
+        <div class="note-icon" aria-hidden="true">i</div>
+        <div>
+          <strong>یک فضای شخصی، بدون شلوغی</strong>
+          <p>
+            پاسخ‌های پرسشنامه در این صفحه نمایش داده نمی‌شوند و فقط وضعیت
+            دریافت و بررسی آن‌ها مشخص است.
+          </p>
+        </div>
+      </section>
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .client-app {
+    position: relative;
+    min-height: 78vh;
+    overflow: hidden;
+    padding: clamp(2rem, 5vw, 4.5rem) 0;
+    background:
+      radial-gradient(circle at 88% 8%, rgba(55,124,113,.14), transparent 28rem),
+      radial-gradient(circle at 4% 94%, rgba(124,55,66,.10), transparent 22rem),
+      linear-gradient(145deg, #f5f8f6 0%, #fffaf7 50%, #edf5f2 100%);
+  }
+
+  .app-shell {
+    position: relative;
+    z-index: 2;
+  }
+
+  .app-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .app-kicker {
+    display: inline-flex;
+    padding: .45rem .75rem;
+    border: 1px solid #d9e9e3;
+    border-radius: 999px;
+    background: rgba(255,255,255,.72);
+    color: #377c71;
+    font-size: .8rem;
+    font-weight: 900;
+  }
+
+  .app-header h1 {
+    margin: .85rem 0 .45rem;
+    color: #183d38;
+    font-size: clamp(2rem, 4vw, 3.1rem);
+    line-height: 1.25;
+  }
+
+  .app-header p {
+    margin: 0;
+    color: #6b7873;
+  }
+
+  .header-actions {
+    display: flex;
+    gap: .65rem;
+    flex-wrap: wrap;
+  }
+
+  .ghost-action {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: .7rem 1rem;
+    border: 1px solid #d7e2dd;
+    border-radius: 14px;
+    background: rgba(255,255,255,.75);
+    color: #254d47;
+    font: inherit;
+    font-weight: 800;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform .16s ease, border-color .16s ease, background .16s ease;
+  }
+
+  .ghost-action:hover {
+    transform: translateY(-1px);
+    border-color: #a9beb6;
+    background: #fff;
+  }
+
+  .status-strip {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: .85rem;
+    margin-bottom: 1rem;
+  }
+
+  .status-pill {
+    min-height: 76px;
+    display: flex;
+    align-items: center;
+    gap: .8rem;
+    padding: .9rem 1rem;
+    border: 1px solid rgba(55,124,113,.13);
+    border-radius: 20px;
+    background: rgba(255,255,255,.78);
+    box-shadow: 0 10px 26px rgba(24,61,56,.055);
+  }
+
+  .status-pill small {
+    display: block;
+    color: #7a8782;
+    font-size: .75rem;
+  }
+
+  .status-pill strong {
+    display: block;
+    margin-top: .15rem;
+    color: #183d38;
+    font-size: .95rem;
+  }
+
+  .status-dot,
+  .status-icon {
+    flex: 0 0 auto;
+    width: 36px;
+    height: 36px;
+    display: grid;
+    place-items: center;
+    border-radius: 12px;
+    background: #e7f3ef;
+    color: #2b6d63;
+    font-weight: 900;
+  }
+
+  .status-dot::before {
+    content: '';
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #377c71;
+    box-shadow: 0 0 0 5px rgba(55,124,113,.10);
+  }
+
+  .dashboard-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.45fr) minmax(300px, .65fr);
+    gap: 1rem;
+  }
+
+  .primary-card {
+    position: relative;
+    min-height: 370px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: clamp(1.4rem, 4vw, 2.2rem);
+    border-radius: 30px;
+    color: #fff;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 12% 12%, rgba(255,255,255,.10), transparent 16rem),
+      linear-gradient(145deg, #183d38 0%, #20564e 62%, #315f58 100%);
+    box-shadow: 0 28px 70px rgba(24,61,56,.18);
+  }
+
+  .primary-card::after {
+    content: '';
+    position: absolute;
+    width: 330px;
+    height: 330px;
+    left: -140px;
+    bottom: -180px;
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 50%;
+    box-shadow:
+      0 0 0 42px rgba(255,255,255,.025),
+      0 0 0 84px rgba(255,255,255,.018);
+  }
+
+  .card-heading,
+  .plan-meta,
+  .primary-action,
+  .empty-plan {
+    position: relative;
+    z-index: 2;
+  }
+
+  .card-heading {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .primary-card .eyebrow {
+    color: rgba(255,255,255,.72);
+  }
+
+  .primary-card h2 {
+    max-width: 620px;
+    margin: .8rem 0 0;
+    font-size: clamp(1.9rem, 4vw, 3.2rem);
+    line-height: 1.35;
+    color: #fff;
+  }
+
+  .plan-mark {
+    width: 58px;
+    height: 58px;
+    display: grid;
+    place-items: center;
+    gap: 4px;
+    padding: 13px;
+    border: 1px solid rgba(255,255,255,.18);
+    border-radius: 18px;
+    background: rgba(255,255,255,.08);
+  }
+
+  .plan-mark span {
+    width: 100%;
+    height: 5px;
+    border-radius: 99px;
+    background: rgba(255,255,255,.78);
+  }
+
+  .plan-mark span:nth-child(2) { width: 78%; }
+  .plan-mark span:nth-child(3) { width: 55%; }
+
+  .plan-meta {
+    display: flex;
+    gap: .6rem;
+    flex-wrap: wrap;
+    margin-top: auto;
+    padding-top: 2rem;
+  }
+
+  .plan-meta span,
+  .waiting-badge {
+    display: inline-flex;
+    padding: .45rem .7rem;
+    border: 1px solid rgba(255,255,255,.16);
+    border-radius: 999px;
+    background: rgba(255,255,255,.08);
+    color: rgba(255,255,255,.85);
+    font-size: .78rem;
+    font-weight: 800;
+  }
+
+  .primary-action {
+    width: fit-content;
+    min-height: 50px;
+    margin-top: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: .55rem;
+    padding: .8rem 1rem;
+    border-radius: 15px;
+    background: #fff;
+    color: #183d38;
+    font-weight: 900;
+    text-decoration: none;
+    box-shadow: 0 12px 28px rgba(0,0,0,.12);
+  }
+
+  .empty-plan {
+    margin-top: auto;
+    padding-top: 2rem;
+  }
+
+  .empty-plan p {
+    max-width: 560px;
+    color: rgba(255,255,255,.75);
+    line-height: 1.9;
+  }
+
+  .side-stack {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .mini-card {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: .85rem;
+    padding: 1.15rem;
+    border: 1px solid #dfe7e3;
+    border-radius: 22px;
+    background: rgba(255,255,255,.88);
+    box-shadow: 0 14px 35px rgba(24,61,56,.07);
+  }
+
+  .mini-icon {
+    width: 46px;
+    height: 46px;
+    display: grid;
+    place-items: center;
+    border-radius: 14px;
+    background: #e6f1ed;
+    color: #2e6d63;
+    font-size: 1.1rem;
+    font-weight: 900;
+  }
+
+  .mini-icon--wine {
+    background: #f4e9eb;
+    color: #7c3742;
+  }
+
+  .mini-card small {
+    color: #7a8782;
+    font-size: .72rem;
+  }
+
+  .mini-card h3 {
+    margin: .18rem 0 .25rem;
+    color: #183d38;
+    font-size: 1rem;
+  }
+
+  .mini-card p {
+    margin: 0;
+    color: #71807a;
+    font-size: .78rem;
+    line-height: 1.7;
+  }
+
+  .mini-link {
+    color: #377c71;
+    font-size: .8rem;
+    font-weight: 900;
+    text-decoration: none;
+  }
+
+  .app-note {
+    margin-top: 1rem;
+    display: flex;
+    gap: .85rem;
+    align-items: flex-start;
+    padding: 1rem 1.1rem;
+    border: 1px solid #e2e9e5;
+    border-radius: 18px;
+    background: rgba(255,255,255,.68);
+  }
+
+  .note-icon {
+    flex: 0 0 auto;
+    width: 32px;
+    height: 32px;
+    display: grid;
+    place-items: center;
+    border-radius: 11px;
+    background: #edf5f2;
+    color: #377c71;
+    font-weight: 900;
+  }
+
+  .app-note strong {
+    color: #183d38;
+  }
+
+  .app-note p {
+    margin: .25rem 0 0;
+    color: #74817d;
+    font-size: .82rem;
+    line-height: 1.75;
+  }
+
+  .app-glow {
+    position: absolute;
+    pointer-events: none;
+    border-radius: 50%;
+  }
+
+  .app-glow--one {
+    width: 360px;
+    height: 360px;
+    right: -160px;
+    top: -140px;
+    background: radial-gradient(circle, rgba(55,124,113,.12), transparent 68%);
+  }
+
+  .app-glow--two {
+    width: 300px;
+    height: 300px;
+    left: -140px;
+    bottom: -120px;
+    background: radial-gradient(circle, rgba(124,55,66,.09), transparent 68%);
+  }
+
+  @media (max-width: 900px) {
+    .dashboard-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .side-stack {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 700px) {
+    .app-header {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .status-strip,
+    .side-stack {
+      grid-template-columns: 1fr;
+    }
+
+    .primary-card {
+      min-height: 320px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .client-app {
+      padding: 1.25rem 0 2rem;
+    }
+
+    .primary-card {
+      border-radius: 24px;
+      min-height: 300px;
+    }
+
+    .card-heading {
+      align-items: flex-start;
+    }
+
+    .plan-mark {
+      width: 48px;
+      height: 48px;
+    }
+
+    .mini-card {
+      grid-template-columns: auto 1fr;
+    }
+
+    .mini-link {
+      grid-column: 2;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ghost-action {
+      transition: none;
+    }
+  }
+</style>
